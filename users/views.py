@@ -1,9 +1,12 @@
 from django.shortcuts import render
 
+
+
 from rest_framework import views, response, exceptions, permissions
 
 from . import serializers as user_serializer
 from . import services
+from . import authencation
 
 class RegisterApi(views.APIView):
 
@@ -16,12 +19,18 @@ class RegisterApi(views.APIView):
 
     data = serializer.validated_data
 
+    user_data = services.check_user_email(data.email)
+
+    if user_data:
+      raise exceptions.NotAcceptable('Email already exist')
+
     serializer.instance = services.create_user(data)
 
+    resp = response.Response()
 
+    resp.data = serializer.data
 
-
-    return response.Response(data = serializer.data)
+    return resp
 
 
 class LoginApi(views.APIView):
@@ -48,6 +57,42 @@ class LoginApi(views.APIView):
     resp.set_cookie(key='jwt', value=token, httponly=True)
 
     return resp
+
+
+
+class UserApi(views.APIView):
+  """
+  description: Endpoint to get current login user
+
+  return: user: json
+  """
+
+  authentication_classes = (authencation.CustomUserAuthentication, )
+  permission_classes = (permissions.IsAuthenticated, )
+
+  print(permission_classes, 'Permit')
+
+  def get(self, request):
+    user = request.user
+
+    serializer = user_serializer.UserSerializer(user)
+
+    return response.Response(data = serializer.data)
+
+
+
+class LogoutApi(views.APIView):
+  authentication_classes = (authencation.CustomUserAuthentication, )
+  permission_classes = (permissions.IsAuthenticated, )
+
+  def post(self, request):
+
+    res = response.Response()
+
+    res.delete_cookie('jwt')
+    res.data = {"message": "Logged out Successfully"}
+    return res
+
 
 
 

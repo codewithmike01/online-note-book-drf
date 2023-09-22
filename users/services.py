@@ -1,5 +1,6 @@
 import dataclasses
 from . import models
+from rest_framework import permissions
 
 # For jwt
 import datetime
@@ -21,7 +22,7 @@ class UserDataClass:
   last_name: str
   email: str
   password: str = None
-  id: int = None
+  id: str = None
 
   @classmethod
   def from_instance(cls, user: "User") -> "UserDataClass":
@@ -43,7 +44,9 @@ def create_user(user_dc: "UserDataClass") -> "UserDataClass":
   if user_dc.password is not None:
     instance.set_password(user_dc.password)
 
+
   instance.save()
+
 
   return UserDataClass.from_instance(instance)
 
@@ -54,12 +57,15 @@ def check_user_email(email: str) -> 'User':
   return user_email
 
 
-def create_token(user_id: int ) -> str:
-  payload = dict(
-    id = user_id,
-    exp = str(datetime.datetime.utcnow() + datetime.timedelta(hours = 24)),
-    iot = str(datetime.datetime.utcnow())
-  )
+def create_token(user_id: str ) -> str:
+  payload = {
+  "id" : str(user_id),
+ "exp": datetime.datetime.utcnow() + datetime.timedelta(hours = 24),
+ "iat" : datetime.datetime.utcnow()
+}
+
+
+
 
   token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
 

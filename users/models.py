@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import AbstractUser, BaseUserManager
+import uuid
 
 # For creating user in Cli
 class UserManager(BaseUserManager):
@@ -40,6 +41,11 @@ class UserManager(BaseUserManager):
 
 
 class User(AbstractUser):
+  id = models.UUIDField(
+    primary_key=True,
+    default=uuid.uuid4,
+    editable=False
+  )
   first_name = models.CharField(blank=False, null=False, max_length=250)
   last_name = models.CharField(blank=False, null=False, max_length=250)
   email = models.EmailField(blank=False, max_length=250, unique=True)

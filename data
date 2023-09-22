@@ -1,6 +1,12 @@
-{
-  "first_name": "johnny",
-  "last_name": "sam",
-  "email": "kanumikechibundu@gmail.com",
-  "password": "12345678"
-}
+[
+  {
+    "first_name": "johnny",
+    "last_name": "sam",
+    "email": "Kami243@gmail.com",
+    "password": "12345678"
+  },
+  {
+    "email": "Kami243@gmail.com",
+    "password": "12345678"
+  }
+]
