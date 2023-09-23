@@ -1,6 +1,6 @@
 import dataclasses
 from . import models
-from rest_framework import permissions
+
 
 # For jwt
 import datetime

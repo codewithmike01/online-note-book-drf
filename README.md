@@ -109,7 +109,7 @@ This are the folders and files relevant to this project.
 
 ##### User Apis
 
-1. Registration `/api/register/` (Post)
+1. Registration `/api/user/register/` (Post)
 
    - Payload
 
@@ -134,7 +134,7 @@ This are the folders and files relevant to this project.
    }
    ```
 
-2. Login `/api/login/` (Post)
+2. Login `/api/user/login/` (Post)
 
    - Payload
 
@@ -147,7 +147,7 @@ This are the folders and files relevant to this project.
 
    - Response 200
 
-3. Logout `/api/logout/` (Post)
+3. Logout `/api/user/logout/` (Post)
 
    - Payload `None`
 
@@ -159,7 +159,7 @@ This are the folders and files relevant to this project.
    }
    ```
 
-4. Me `/api/me/` (Get)
+4. Me `/api/user/me/` (Get)
 
    - Payload `None`
 

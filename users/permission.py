@@ -9,6 +9,9 @@ class CustomPermision(BasePermission):
         token = request.COOKIES.get('jwt')
         token_is_verified = False
 
+        if not token:
+           raise exceptions.AuthenticationFailed('Unauthorized')
+
         try:
           payload = jwt.decode(token, settings.JWT_KEY, algorithms=['HS256'])
           token_is_verified = True

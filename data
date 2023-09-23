@@ -6,7 +6,29 @@
     "password": "12345678"
   },
   {
-    "email": "Kami243@gmail.com",
+    "email": "onohghucsdsss43@gmail.com",
     "password": "12345678"
+  },
+  {
+    "title": "Fix bug",
+    "content": " This is bug Fixed over here",
+    "due_date": "2023-09-23 20:45:37.013440",
+    "is_complete": false,
+    "priority": 3
+  },
+  {
+    "id": "a4de0724-36c9-4cfe-b1e5-537bf5cc789c",
+    "title": "Fix bug",
+    "content": "This is bug Fixed over here",
+    "created_at": null,
+    "due_date": "2023-09-23T20:45:37.013440Z",
+    "priority": 3,
+    "is_complete": false,
+    "user": {
+      "id": "4e86da70-3853-4932-869a-a50d9f162b11",
+      "first_name": "jammy",
+      "last_name": "black",
+      "email": "onohghucsdsss43@gmail.com"
+    }
   }
 ]
