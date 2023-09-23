@@ -62,14 +62,12 @@ def create_token(user_id: str ) -> str:
   "id" : str(user_id),
  "exp": datetime.datetime.utcnow() + datetime.timedelta(hours = 24),
  "iat" : datetime.datetime.utcnow()
-}
-
-
-
+    }
 
   token = jwt.encode(payload, settings.JWT_KEY, algorithm="HS256")
 
   return token
+
 
 
 

@@ -24,3 +24,5 @@ class CustomUserAuthentication(authentication.BaseAuthentication):
 
     return (user, None)
 
+
+

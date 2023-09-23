@@ -5,8 +5,8 @@ from django.shortcuts import render
 from rest_framework import views, response, exceptions, permissions
 
 from . import serializers as user_serializer
-from . import services
-from . import authencation
+from . import services, authencation, permission
+
 
 class RegisterApi(views.APIView):
 
@@ -26,7 +26,12 @@ class RegisterApi(views.APIView):
 
     serializer.instance = services.create_user(data)
 
+    # Token (To auth user on registraion successful)
+    token = services.create_token(serializer.data.get("id"))
+
     resp = response.Response()
+
+    resp.set_cookie(key='jwt', value=token, httponly=True)
 
     resp.data = serializer.data
 
@@ -68,9 +73,9 @@ class UserApi(views.APIView):
   """
 
   authentication_classes = (authencation.CustomUserAuthentication, )
-  permission_classes = (permissions.IsAuthenticated, )
+  permission_classes = (permission.CustomPermision, )
 
-  print(permission_classes, 'Permit')
+
 
   def get(self, request):
     user = request.user
@@ -83,7 +88,7 @@ class UserApi(views.APIView):
 
 class LogoutApi(views.APIView):
   authentication_classes = (authencation.CustomUserAuthentication, )
-  permission_classes = (permissions.IsAuthenticated, )
+  permission_classes = (permission.CustomPermision, )
 
   def post(self, request):
 
