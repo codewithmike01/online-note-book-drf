@@ -44,6 +44,48 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
 
 ## Starting
 
+#### Prerequisite
+
+- Note: You need to have python3.x [installed](https://www.tutorialspoint.com/how-to-install-python-in-windows) on you machine.
+
+##### Steps
+
+1.  Clone the project into your machine.
+
+    ```cmd
+          git clone https://github.com/Ginohmk/online-note-book-drf.git
+    ```
+
+2.  Navigate into the project folder.
+
+    ```cmd
+       cd online-note-book-drf
+    ```
+
+3.  Start your virtual environment (mac/linux and windows)
+
+    ```cmd
+      source/bin/activate
+    ```
+
+    Or
+
+    ```cmd
+      \venv\Scripts\activate.bat
+    ```
+
+4.  Install project dependencies.
+
+    ```cmd
+      pip install -r requirements.txt
+    ```
+
+5.  Start server
+
+    ```
+      ./manage.py runserver
+    ```
+
 ### Folder Structure
 
 ### Backend APIs
