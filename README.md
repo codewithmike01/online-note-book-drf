@@ -44,7 +44,7 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
 
 ## Starting
 
-#### Prerequisite
+##### Prerequisite
 
 - Note: You need to have python3.x [installed](https://www.tutorialspoint.com/how-to-install-python-in-windows) on you machine.
 
@@ -107,4 +107,97 @@ This are the folders and files relevant to this project.
 
 ### Backend APIs
 
-### Attributes
+##### User Apis
+
+1. Registration `/api/register/` (Post)
+
+   - Payload
+
+   ```json
+   {
+     "id": "string",
+     "first_name": "string",
+     "last_name": "string",
+     "email ": "string",
+     "password": "string"
+   }
+   ```
+
+   - Response 200
+
+   ```json
+   {
+     "id": "string",
+     "first_name": "string",
+     "last_name": "string",
+     "email ": "string"
+   }
+   ```
+
+2. Login `/api/login/` (Post)
+
+   - Payload
+
+   ```json
+   {
+     "email": "string",
+     "password": "string"
+   }
+   ```
+
+   - Response 200
+
+3. Logout `/api/logout/` (Post)
+
+   - Payload `None`
+
+   - Response 200
+
+   ```json
+   {
+     "message": "Logged out Successfully"
+   }
+   ```
+
+4. Me `/api/me/` (Get)
+
+   - Payload `None`
+
+   - Response 200
+
+   ```json
+   {
+     "id": "string",
+     "first_name": "string",
+     "last_name": "string",
+     "email ": "string"
+   }
+   ```
+
+   ##### Note Apis
+
+### Author
+
+👤 **Kanu Mike**
+
+- GitHub: [@Ginohmk](https://github.com/Ginohmk)
+- Twitter: [@michotall95](https://www.twitter.com/michotall95)
+- LinkedIn: [@kanumike](https://www.linkedin.com/in/mike-kanu-dev/)
+- Instagram: [@savy_kanu_mike](https/instagram.com/savy_kanu_mike)
+- Facebook: [@mike.kanu](https://www.facebook.com/mike.kanu)
+
+### 🤝 Contribute
+
+Contributions, issues, and feature requests are welcome!
+
+Feel free to check the [issues page](https://github.com/Ginohmk/online-note-book-drf/issues)
+
+### Acknowledgement
+
+## Show your support
+
+Give a ⭐️ if you like this project!
+
+## 📝 License
+
+This project is [MIT](./MIT.md) licensed.
