@@ -30,5 +30,27 @@
       "last_name": "black",
       "email": "onohghucsdsss43@gmail.com"
     }
+  },
+  {
+    "id": "a8968062-fa08-4082-b775-e06e10be200b",
+    "title": "Go jogging",
+    "content": "This is good for me",
+    "created_at": "2023-09-23T20:13:00.876321Z",
+    "due_date": "2023-09-23T20:45:37.013440Z",
+    "priority": 9,
+    "is_complete": false,
+    "user": {
+      "id": "4e86da70-3853-4932-869a-a50d9f162b11",
+      "first_name": "jammy",
+      "last_name": "black",
+      "email": "onohghucsdsss43@gmail.com"
+    }
+  },
+  {
+    "title": "Skipping Ropes",
+    "content": "This is good for me",
+    "due_date": "2023-09-23T20:45:37.013440Z",
+    "priority": 3,
+    "is_complete": true
   }
 ]
