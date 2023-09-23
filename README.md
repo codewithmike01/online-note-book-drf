@@ -18,7 +18,7 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
    - Email
    - Password
 
-3. Password recovery: users can recovery password when forgotton, by upadting/reseting password using `Email link`.
+3. Password recovery: users can recovery password when forgotton, by updating/reseting password using `Email link`.
 
 4. User can perform CRUD operation on Dairy notes beloging to them.
 
@@ -86,6 +86,8 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
       ./manage.py runserver
     ```
 
+    <br />
+
 ### Folder Structure
 
 This are the folders and files relevant to this project.
@@ -104,6 +106,8 @@ This are the folders and files relevant to this project.
 ├── manage.py
 ├── README.md
 ├── requirements.txt
+
+  <br />
 
 ### Backend APIs
 
@@ -134,6 +138,8 @@ This are the folders and files relevant to this project.
    }
    ```
 
+   <br />
+
 2. Login `/api/user/login/` (Post)
 
    - Payload
@@ -146,6 +152,7 @@ This are the folders and files relevant to this project.
    ```
 
    - Response 200
+     <br />
 
 3. Logout `/api/user/logout/` (Post)
 
@@ -158,6 +165,8 @@ This are the folders and files relevant to this project.
      "message": "Logged out Successfully"
    }
    ```
+
+   <br />
 
 4. Me `/api/user/me/` (Get)
 
@@ -174,8 +183,160 @@ This are the folders and files relevant to this project.
    }
    ```
 
-   ##### Note Apis
+   <br />
 
+##### Note Apis
+
+1.  Create note `/api/note/create/` (Post)
+
+`Note: priority accepts min = 1 and max = 10`
+
+- Payload
+
+```json
+{
+ "title": "string",
+ "content": "string",
+ "due_date": "string datetime",
+ "is_complete": boolean,
+ "priority": int
+}
+```
+
+- Response 200
+
+```json
+{
+ "id": "uuid string",
+ "title": "string",
+ "content": "string",
+ "created_at": null,
+ "due_date": "string datetime",
+ "priority": int,
+ "is_complete": boolean,
+ "user": {
+   "id": "string",
+   "first_name": "string",
+   "last_name": "string",
+   "email": "string"
+ }
+}
+```
+
+  <br />
+
+2. Get user notes `/api/note/create/` (Get)
+
+   - Response 200
+
+   ```json
+    [
+      {
+        "id": "uuid string",
+        "title": "string",
+        "content": "string",
+        "created_at": null,
+        "due_date": "string datetime",
+        "priority": int,
+        "is_complete": boolean,
+        "user": {
+          "id": "string",
+          "first_name": "string",
+          "last_name": "string",
+          "email": "string"
+        }
+      }
+    ]
+   ```
+
+     <br />
+
+3. Get all notes `/api/note/` (Get)
+
+   - Response 200
+
+   ```json
+    [
+      {
+        "id": "uuid string",
+        "title": "string",
+        "content": "string",
+        "created_at": null,
+        "due_date": "string datetime",
+        "priority": int,
+        "is_complete": boolean,
+        "user": {
+          "id": "string",
+          "first_name": "string",
+          "last_name": "string",
+          "email": "string"
+        }
+      }
+    ]
+   ```
+
+4. Delete note `/api/note/<id: str>/` (Delete)
+
+   - Response 204
+     <br />
+
+5. Update note `/api/note/<id: str>/` (Put)
+
+- Payload
+
+  ```json
+  {
+  "title": "string",
+  "content": "string",
+  "due_date": "string datetime",
+  "is_complete": boolean,
+  "priority": int
+  }
+  ```
+
+- Response 200
+
+```json
+   {
+     "id": "uuid string",
+     "title": "string",
+     "content": "string",
+     "created_at": null,
+     "due_date": "string datetime",
+     "priority": int,
+     "is_complete": boolean,
+     "user": {
+       "id": "string",
+       "first_name": "string",
+       "last_name": "string",
+       "email": "string"
+     }
+   }
+```
+
+5. Retreive note `/api/note/<id: str>/` (Get)
+
+- Response 200
+
+```json
+   {
+     "id": "uuid string",
+     "title": "string",
+     "content": "string",
+     "created_at": null,
+     "due_date": "string datetime",
+     "priority": int,
+     "is_complete": boolean,
+     "user": {
+       "id": "string",
+       "first_name": "string",
+       "last_name": "string",
+       "email": "string"
+     }
+   }
+```
+
+<br/>
 ### Author
 
 👤 **Kanu Mike**
