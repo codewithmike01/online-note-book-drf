@@ -88,6 +88,23 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
 
 ### Folder Structure
 
+This are the folders and files relevant to this project.
+
+├── drf # Project file
+....├── settings.py
+....├── urls.py
+├── users # User app
+....├── admin.py
+....├── authentication.py # Custom authentication
+....├── models.py
+....├── permission.py # Custom permision
+....├── serializers.py
+....├── urls.py
+....├── views.py
+├── manage.py
+├── README.md
+├── requirements.txt
+
 ### Backend APIs
 
 ### Attributes
