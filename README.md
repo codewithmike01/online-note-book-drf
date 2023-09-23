@@ -68,7 +68,7 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
       source/bin/activate
     ```
 
-    Or
+    Or for windows
 
     ```cmd
       \venv\Scripts\activate.bat
