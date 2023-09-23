@@ -2,10 +2,10 @@ from django.shortcuts import render
 
 
 
-from rest_framework import views, response, exceptions, permissions
+from rest_framework import views, response, exceptions
 
 from . import serializers as user_serializer
-from . import services, authencation, permission
+from . import services, authentication as auth_user, permission
 
 
 class RegisterApi(views.APIView):
@@ -72,7 +72,7 @@ class UserApi(views.APIView):
   return: user: json
   """
 
-  authentication_classes = (authencation.CustomUserAuthentication, )
+  authentication_classes = (auth_user.CustomUserAuthentication, )
   permission_classes = (permission.CustomPermision, )
 
 
@@ -87,7 +87,7 @@ class UserApi(views.APIView):
 
 
 class LogoutApi(views.APIView):
-  authentication_classes = (authencation.CustomUserAuthentication, )
+  authentication_classes = (auth_user.CustomUserAuthentication, )
   permission_classes = (permission.CustomPermision, )
 
   def post(self, request):
