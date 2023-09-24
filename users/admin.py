@@ -7,7 +7,8 @@ class UserAdmin(admin.ModelAdmin):
     "id",
     "first_name",
     "last_name",
-    "email"
+    "email",
+    'is_email_verified'
   )
 
 

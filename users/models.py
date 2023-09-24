@@ -50,6 +50,7 @@ class User(AbstractUser):
   last_name = models.CharField(blank=False, null=False, max_length=250)
   email = models.EmailField(blank=False, max_length=250, unique=True)
   password = models.CharField(max_length=255)
+  is_email_verified = models.BooleanField(default=False)
   username = None
 
   objects = UserManager()

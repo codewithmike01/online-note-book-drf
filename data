@@ -10,6 +10,12 @@
     "password": "12345678"
   },
   {
+    "first_name": "Mike",
+    "last_name": "tall",
+    "email": "michotall95@gmail.com",
+    "password": "12345678"
+  },
+  {
     "title": "Fix bug",
     "content": " This is bug Fixed over here",
     "due_date": "2023-09-23 20:45:37.013440",

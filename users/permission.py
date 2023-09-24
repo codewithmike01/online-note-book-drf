@@ -19,4 +19,4 @@ class CustomPermision(BasePermission):
         except:
           raise exceptions.AuthenticationFailed('Unauthorized')
 
-        return bool(request.user and token_is_verified)
+        return bool(request.user  and request.user.is_email_verified and token_is_verified)

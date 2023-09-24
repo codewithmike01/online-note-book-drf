@@ -95,12 +95,20 @@ This are the folders and files relevant to this project.
 ├── drf # Project file
 ....├── settings.py
 ....├── urls.py
+├── note # Note app
+....├── admin.py
+....├── models.py
+....├── serializers.py
+....├── services.py
+....├── urls.py
+....├── views.py
 ├── users # User app
 ....├── admin.py
 ....├── authentication.py # Custom authentication
 ....├── models.py
 ....├── permission.py # Custom permision
 ....├── serializers.py
+....├── services.py
 ....├── urls.py
 ....├── views.py
 ├── manage.py
@@ -134,7 +142,8 @@ This are the folders and files relevant to this project.
      "id": "string",
      "first_name": "string",
      "last_name": "string",
-     "email ": "string"
+     "email ": "string",
+     "is_email_verified": false
    }
    ```
 
@@ -179,7 +188,8 @@ This are the folders and files relevant to this project.
      "id": "string",
      "first_name": "string",
      "last_name": "string",
-     "email ": "string"
+     "email ": "string",
+     "is_email_verified": boolean
    }
    ```
 
