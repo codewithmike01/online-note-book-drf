@@ -5,7 +5,7 @@ class UserSerializer(serializers.Serializer):
   id = serializers.UUIDField(read_only = True)
   first_name = serializers.CharField()
   last_name = serializers.CharField()
-  email = serializers.CharField()
+  email = serializers.EmailField()
   password = serializers.CharField(write_only = True)
   is_email_verified = serializers.BooleanField(read_only=True)
 
@@ -13,3 +13,13 @@ class UserSerializer(serializers.Serializer):
     data = super().to_internal_value(data)
 
     return services.UserDataClass(**data)
+
+
+
+
+class EmailSerializer(serializers.Serializer):
+  email = serializers.EmailField()
+
+
+  class Meta:
+    fields = ['email']

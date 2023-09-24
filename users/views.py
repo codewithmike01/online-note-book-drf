@@ -1,6 +1,6 @@
 from django.shortcuts import render
 
-from rest_framework import views, response, exceptions, generics
+from rest_framework import views, response, exceptions, status
 
 from . import serializers as user_serializer
 from . import services, authentication as auth_user, permission
@@ -8,6 +8,12 @@ from . import services, authentication as auth_user, permission
 # For email sending
 from django.contrib.sites.shortcuts import get_current_site
 from django.urls import reverse
+
+# password rerest
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+from django.utils.encoding import  force_bytes
+from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
 
 class RegisterApi(views.APIView):
 
@@ -38,7 +44,7 @@ class RegisterApi(views.APIView):
 
     absolute_url = 'http://' + current_site + relative_link+"?token="+str(token)
 
-    email_body = f'Hi {request.user.last_name} {request.user.first_name}, Please use the link below to verify your email. \n {absolute_url} '
+    email_body = f'Hi {serializer.data.get("first_name")} {serializer.data.get("last_name")}, Please use the link below to verify your email. \n {absolute_url} '
 
     data = {"subject": "Verify your email", "body": email_body , "user_email": serializer.data.get("email") }
 
@@ -130,6 +136,61 @@ class VerifyEmailApi(views.APIView):
       resp.data = serializer.data
 
       return resp
+
+
+class RequestPasswordReset(views.APIView):
+  def post(self, request):
+    serializer = user_serializer.EmailSerializer(data = request.data)
+
+    serializer.is_valid(raise_exception= True)
+
+    data = serializer.validated_data
+
+    user_data = services.check_user_email(data.get("email"))
+
+    if not  user_data:
+      raise exceptions.NotFound('Email does not exist')
+
+    # Encode user id
+    uidb64 = urlsafe_base64_encode(force_bytes(user_data.id))
+
+    token = PasswordResetTokenGenerator().make_token(user_data)
+
+    current_site = get_current_site(request).domain
+
+    relative_link = reverse('reset_password_confirm', args=( uidb64,  token))
+
+    absolute_url = 'http://' + current_site + relative_link
+
+    email_body = f'Hi,  \n Please use the link below to reset your password. \n {absolute_url} '
+
+    data = {"subject": "Reset your password", "body": email_body , "user_email": user_data.email }
+
+    services.send_email(data)
+
+    return response.Response(data = {"message": "Password reset link sent!!"})
+
+
+
+class PasswordResetConfirmApi(views.APIView):
+
+  def post(self, request, uidb64, token):
+    try:
+      user_id = urlsafe_base64_decode(uidb64).decode()
+
+    except:
+      raise exceptions.AuthenticationFailed('Unauthorized')
+
+    services.check_password_token(user_id, token)
+
+    return response.Response(data = {"message" : "Token is valid",
+                                       "id" : user_id, "token": token}, status=status.HTTP_200_OK)
+
+
+
+class SetPassword(views.APIView):
+  pass
+
 
 
 

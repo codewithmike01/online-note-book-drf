@@ -12,6 +12,9 @@ import jwt
 # setting
 from django.conf import settings
 
+# Generated password token
+from django.contrib.auth.tokens import PasswordResetTokenGenerator
+
 
 # For type checking of model
 from typing import TYPE_CHECKING
@@ -34,9 +37,10 @@ class UserDataClass:
       first_name = user.first_name,
       last_name = user.last_name,
       email = user.email,
-       is_email_verified = user.is_email_verified,
+      is_email_verified = user.is_email_verified,
       id = user.id
     )
+
 
 
 def create_user(user_dc: "UserDataClass") -> "UserDataClass":
@@ -77,8 +81,7 @@ def create_token(user_id: str ) -> str:
 
 
 def send_email(data: dict) -> None:
-  print(data)
-  email = EmailMessage(subject= data.get('subject'), body= data.get('body'), from_email= settings.EMAIL_HOST_USER , to= [data.get('user_email')] )
+  email = EmailMessage(subject= data.get('subject'), body= data.get('body'), from_email= settings.EMAIL_HOST_USER , to= [data.get('user_email')]  )
   email.send()
 
 
@@ -105,6 +108,14 @@ def verify_email_auth(token)-> "UserDataClass":
           raise exceptions.AuthenticationFailed('Unauthorized')
 
 
+
+def check_password_token(user_id: bytes, token: bytes) -> None:
+
+   user = models.User.objects.get(id = user_id)
+
+  #  Check if token is correct
+   if not PasswordResetTokenGenerator().check_token(user, token):
+      raise exceptions.AuthenticationFailed('Token not valid')
 
 
 

@@ -11,7 +11,7 @@ class CustomUserAuthentication(authentication.BaseAuthentication):
     token = request.COOKIES.get('jwt')
 
     if not token:
-      raise exceptions.NotFound('No user logged in')
+      raise exceptions.AuthenticationFailed('Unauthorized')
 
 
     try:
