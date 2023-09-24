@@ -214,7 +214,7 @@ This are the folders and files relevant to this project.
 - Response 200
   <br />
 
-5. Request password reset link `/api/user/reset_password_confirm/<uidb64>/<token>/` (Post)
+5. Confirm and reset password `/api/user/reset_password_confirm/<uidb64>/<token>/` (Post)
 
 `Note: Passsword Reset link is sent to user`
 
