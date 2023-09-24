@@ -193,6 +193,53 @@ This are the folders and files relevant to this project.
    }
    ```
 
+  <br />
+
+5. Email verification `/api/user/verify-email/` (Post)
+
+`Note: Verification link is sent to user and  when clicked they can verify thier email`
+
+- Payload `None`
+
+- Response 200
+
+   <br />
+
+5. Request password reset link `/api/user/request-password-reset/` (Post)
+
+`Note: Passsword Reset link is sent to user`
+
+- Payload `None`
+
+- Response 200
+  <br />
+
+5. Request password reset link `/api/user/reset_password_confirm/<uidb64>/<token>/` (Post)
+
+`Note: Passsword Reset link is sent to user`
+
+- Payload
+
+```json
+{
+  "token": "string",
+  "uidb64": "string",
+  "password": "string"
+}
+```
+
+- Response 200
+
+```json
+ {
+     "id": "string",
+     "first_name": "string",
+     "last_name": "string",
+     "email ": "string",
+     "is_email_verified": boolean
+   }
+```
+
    <br />
 
 ##### Note Apis

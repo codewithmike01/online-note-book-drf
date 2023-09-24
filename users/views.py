@@ -174,22 +174,35 @@ class RequestPasswordReset(views.APIView):
 
 class PasswordResetConfirmApi(views.APIView):
 
-  def post(self, request, uidb64, token):
+  def patch(self, request, *args, **kwargs):
+    serializer = user_serializer.PasswordResetSerializer(data = request.data)
+
+    serializer.is_valid(raise_exception= True)
+
+    data = serializer.validated_data
+
+    print(data.get('token'), 'DATA')
+
     try:
-      user_id = urlsafe_base64_decode(uidb64).decode()
+      user_id = urlsafe_base64_decode(data.get("uidb64")).decode()
 
     except:
-      raise exceptions.AuthenticationFailed('Unauthorized')
+      raise exceptions.AuthenticationFailed('Unauthorized ggHrt')
 
-    services.check_password_token(user_id, token)
+    user_dc, user  = services.check_password_token(user_id, data.get("token"))
 
-    return response.Response(data = {"message" : "Token is valid",
-                                       "id" : user_id, "token": token}, status=status.HTTP_200_OK)
+    user.set_password(data.get('password'))
+
+    user.save()
+
+    user_data = user_serializer.UserSerializer(user_dc)
+
+
+    return response.Response(data = user_data.data , status=status.HTTP_200_OK)
 
 
 
-class SetPassword(views.APIView):
-  pass
+
 
 
 

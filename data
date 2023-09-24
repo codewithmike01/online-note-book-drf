@@ -16,7 +16,13 @@
     "password": "12345678"
   },
   {
-    "email": "michotall95@gmail.com"
+    "email": "michotall95@gmail.com",
+    "password": "12345678"
+  },
+  {
+    "token": "bv1vi8-e278480a68babfb6d26358c6b056058e",
+    "uidb64": "NDliMDUyYzgtNzY3Ny00NGJlLTg4YjEtNmMxNWViZDAzZjlm",
+    "password": "lovelove"
   },
   {
     "title": "Fix bug",

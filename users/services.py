@@ -109,13 +109,17 @@ def verify_email_auth(token)-> "UserDataClass":
 
 
 
-def check_password_token(user_id: bytes, token: bytes) -> None:
+def check_password_token(user_id: bytes, token: bytes) -> 'User':
 
    user = models.User.objects.get(id = user_id)
+
+   print('IN CHECK TOKEN')
 
   #  Check if token is correct
    if not PasswordResetTokenGenerator().check_token(user, token):
       raise exceptions.AuthenticationFailed('Token not valid')
+
+   return (UserDataClass.from_instance(user), user)
 
 
 

@@ -20,7 +20,7 @@ class UserManager(BaseUserManager):
     user.is_staff = is_staff
     user.is_superuser = is_superuser
 
-# save to db
+    # save to db
     user.save()
 
     return user
