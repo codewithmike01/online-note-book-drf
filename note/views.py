@@ -83,3 +83,15 @@ class UnfinishedNote(views.APIView):
         serializer = note_serializer.NoteSeralizer(notes, many=True)
 
         return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class FinishedNote(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def get(self, request):
+        notes = services.get_finished_note()
+
+        serializer = note_serializer.NoteSeralizer(notes, many=True)
+
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)

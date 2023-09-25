@@ -130,3 +130,9 @@ def get_unfinished_note() -> "NoteDataClass":
     notes = models.Note.objects.filter(is_complete=False)
 
     return [NoteDataClass.from_instance(single_note) for single_note in notes]
+
+
+def get_finished_note() -> "NoteDataClass":
+    notes = models.Note.objects.filter(is_complete=True)
+
+    return [NoteDataClass.from_instance(single_note) for single_note in notes]
