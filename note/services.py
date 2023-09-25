@@ -4,6 +4,10 @@ from rest_framework import exceptions
 from users import services as user_services
 from . import models
 
+# For making html
+from django.shortcuts import render
+from django.template import Template, Context
+
 # To validate uuid passed in api
 from uuid import UUID
 
@@ -141,11 +145,11 @@ def get_finished_note() -> list["NoteDataClass"]:
 def get_overdue_note() -> list["NoteDataClass"]:
     pass
 
-    # current_date = datetime.datetime.now()
+    current_date = datetime.datetime.now()
 
-    # notes = models.Note.objects.filter(due_date < current_date )
+    notes = models.Note.objects.filter(due_date__lte=current_date)
 
-    # return [NoteDataClass.from_instance(single_note) for single_note in notes]
+    return [NoteDataClass.from_instance(single_note) for single_note in notes]
 
 
 def get_order_by_due_date_note(order_arg: str) -> list["NoteDataClass"]:
@@ -170,3 +174,23 @@ def get_order_by_created_at_note(order_arg: str) -> list["NoteDataClass"]:
     notes = models.Note.objects.all().order_by(sort_arg_value)
 
     return [NoteDataClass.from_instance(single_note) for single_note in notes]
+
+
+def generate_pdf_html() -> object:
+    # Get all notes
+    notes = get_notes()
+
+    html_data = {}
+
+    for index, note in enumerate(notes):
+        html_data[index] = {
+            "title": note.title,
+            "user": {"first_name": note.user.first_name},
+        }
+
+    # context = {list: {"1" : {}, "2":{)}}}
+
+    context = {"list": html_data}
+    return context
+
+    # render(request, "notes.html", context)

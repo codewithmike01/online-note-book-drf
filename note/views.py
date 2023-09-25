@@ -9,6 +9,11 @@ from . import services
 from django.http import HttpResponse
 import csv
 
+#  covert html to pdf
+import pdfkit
+from django.template.loader import get_template
+import os
+
 
 # Create and Get user notes
 class NoteApi(views.APIView):
@@ -199,5 +204,29 @@ class GenerateCSVApi(views.APIView):
                     note.get("user").get("email"),
                 ]
             )
+
+        return response
+
+
+class GeneratePDFApi(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def post(self, request):
+        data = services.generate_pdf_html()
+
+        # print(f"{os.getcwd()}/templates/notes.html")
+
+        # path = os.getcwd()
+
+        template = get_template("notes.html")
+
+        # html = template.render(data)
+
+        pdf = pdfkit.from_string("Hello world", False)
+
+        response = HttpResponse(pdf, content="application/pdf")
+
+        response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
 
         return response
