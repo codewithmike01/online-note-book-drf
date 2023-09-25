@@ -93,12 +93,12 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
 This are the folders and files relevant to this project.
 
 ├── drf # Project file
-....├── settings.py
-....├── urls.py
-├── note # Note app
-....├── admin.py
-....├── models.py
-....├── serializers.py
+' ├── settings.py
+' ├── urls.py
+├── note # Note app <br>
+' ├── admin.py
+' ├── models.py
+' ├── serializers.py
 ....├── services.py
 ....├── urls.py
 ....├── views.py
@@ -131,7 +131,8 @@ This are the folders and files relevant to this project.
      "first_name": "string",
      "last_name": "string",
      "email ": "string",
-     "password": "string"
+     "password": "string",
+     "is_email_verified": boolean
    }
    ```
 
