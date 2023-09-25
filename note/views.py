@@ -5,6 +5,10 @@ from . import serializers as note_serializer
 
 from . import services
 
+# For Http response Typing
+from django.http import HttpResponse
+import csv
+
 
 # Create and Get user notes
 class NoteApi(views.APIView):
@@ -143,3 +147,57 @@ class OrderNoteCreatedAtApi(views.APIView):
         serializer = note_serializer.NoteSeralizer(notes, many=True)
 
         return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class GenerateCSVApi(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def get(self, request):
+        notes = services.get_notes()
+
+        serializer = note_serializer.NoteSeralizer(notes, many=True)
+
+        response = HttpResponse(
+            content="text/csv",
+        )
+
+        response["Content-Disposition"] = 'attachment; filename="notes.csv"'
+
+        writer = csv.writer(response)
+
+        writer.writerow(
+            [
+                "id",
+                "title",
+                "content",
+                "created_at",
+                "due_date",
+                "priority",
+                "is_complete",
+                "user_id",
+                "user_first_name",
+                "user_last_name",
+                "user_email",
+            ]
+        )
+
+        for note in serializer.data:
+            print(note.get("user").get("first_name"), "Data")
+            writer.writerow(
+                [
+                    note.get("id"),
+                    note.get("title"),
+                    note.get("content"),
+                    note.get("created_at"),
+                    note.get("due_date"),
+                    note.get("priority"),
+                    note.get("is_complete"),
+                    note.get("user").get("user_id"),
+                    note.get("user").get("first_name"),
+                    note.get("user").get("last_name"),
+                    note.get("user").get("email"),
+                ]
+            )
+
+        return response
