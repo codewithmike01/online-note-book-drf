@@ -132,7 +132,33 @@ def get_unfinished_note() -> "NoteDataClass":
     return [NoteDataClass.from_instance(single_note) for single_note in notes]
 
 
-def get_finished_note() -> "NoteDataClass":
+def get_finished_note() -> list["NoteDataClass"]:
     notes = models.Note.objects.filter(is_complete=True)
+
+    return [NoteDataClass.from_instance(single_note) for single_note in notes]
+
+
+def get_overdue_note() -> list["NoteDataClass"]:
+    pass
+
+    # current_date = datetime.datetime.now()
+
+    # notes = models.Note.objects.filter(due_date < current_date )
+
+    # return [NoteDataClass.from_instance(single_note) for single_note in notes]
+
+
+def get_order_by_due_date_note(order_arg: str) -> list["NoteDataClass"]:
+    sort_arg_value = "due_date" if order_arg.lower() == "asc" else "-due_date"
+
+    notes = models.Note.objects.all().order_by(sort_arg_value)
+
+    return [NoteDataClass.from_instance(single_note) for single_note in notes]
+
+
+def get_order_by_priority_note(order_arg: str) -> list["NoteDataClass"]:
+    sort_arg_value = "priority" if order_arg.lower() == "asc" else "-priority"
+
+    notes = models.Note.objects.all().order_by(sort_arg_value)
 
     return [NoteDataClass.from_instance(single_note) for single_note in notes]

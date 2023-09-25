@@ -73,7 +73,7 @@ class NoteRetreiveUpdateDelete(views.APIView):
         return response.Response(data=serializer.data)
 
 
-class UnfinishedNote(views.APIView):
+class UnfinishedNoteApi(views.APIView):
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
@@ -85,12 +85,48 @@ class UnfinishedNote(views.APIView):
         return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
-class FinishedNote(views.APIView):
+class FinishedNoteApi(views.APIView):
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
     def get(self, request):
         notes = services.get_finished_note()
+
+        serializer = note_serializer.NoteSeralizer(notes, many=True)
+
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class OverDueNoteApi(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def get(self, request):
+        notes = services.get_overdue_note()
+
+        serializer = note_serializer.NoteSeralizer(notes, many=True)
+
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderNoteDueDateApi(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def get(self, request, order_arg):
+        notes = services.get_order_by_due_date_note(order_arg)
+
+        serializer = note_serializer.NoteSeralizer(notes, many=True)
+
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderNotePriorityApi(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def get(self, request, order_arg):
+        notes = services.get_order_by_priority_note(order_arg)
 
         serializer = note_serializer.NoteSeralizer(notes, many=True)
 
