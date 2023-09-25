@@ -131,3 +131,15 @@ class OrderNotePriorityApi(views.APIView):
         serializer = note_serializer.NoteSeralizer(notes, many=True)
 
         return response.Response(data=serializer.data, status=status.HTTP_200_OK)
+
+
+class OrderNoteCreatedAtApi(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def get(self, request, order_arg):
+        notes = services.get_order_by_created_at_note(order_arg)
+
+        serializer = note_serializer.NoteSeralizer(notes, many=True)
+
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)

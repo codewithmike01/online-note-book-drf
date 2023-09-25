@@ -18,6 +18,11 @@ urlpatterns = [
         name="order-duedate",
     ),
     path(
+        "order-created-at/<str:order_arg>/",
+        apis.OrderNoteCreatedAtApi.as_view(),
+        name="order-created-at",
+    ),
+    path(
         "<str:note_id>/",
         apis.NoteRetreiveUpdateDelete.as_view(),
         name="Retreive update delete",

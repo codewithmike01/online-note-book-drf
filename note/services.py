@@ -162,3 +162,11 @@ def get_order_by_priority_note(order_arg: str) -> list["NoteDataClass"]:
     notes = models.Note.objects.all().order_by(sort_arg_value)
 
     return [NoteDataClass.from_instance(single_note) for single_note in notes]
+
+
+def get_order_by_created_at_note(order_arg: str) -> list["NoteDataClass"]:
+    sort_arg_value = "created_at" if order_arg.lower() == "asc" else "-created_at"
+
+    notes = models.Note.objects.all().order_by(sort_arg_value)
+
+    return [NoteDataClass.from_instance(single_note) for single_note in notes]
