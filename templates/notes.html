@@ -6,6 +6,18 @@
     <title>Document</title>
   </head>
   <body>
-    <h1>{{Hello}}</h1>
+    <h1>Online Note List</h1>
+
+    {% for key, value in note_lists.items%}
+    <h3>Note {{key}}</h3>
+
+    {%for k_note, v_note in value.items%}
+
+    <p>{{k_note}} : {{v_note}}</p>
+    {% if k_note == 'user' %} {%for k_user, v_user in value.items%}
+
+    <p>{{k_user}} : {{v_user}}</p>
+
+    {%endfor%} {% endif %} {%endfor%} {%endfor%}
   </body>
 </html>

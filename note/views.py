@@ -221,12 +221,14 @@ class GeneratePDFApi(views.APIView):
 
         template = get_template("notes.html")
 
-        # html = template.render(data)
+        html = template.render(data)
+
+        print(html, "HTML")
 
         pdf = pdfkit.from_string("Hello world", False)
 
-        response = HttpResponse(pdf, content="application/pdf")
+        # response = HttpResponse(pdf, content="application/pdf")
 
-        response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
+        # response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
 
-        return response
+        return response.Response(data="Hello Here")

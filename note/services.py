@@ -184,13 +184,47 @@ def generate_pdf_html() -> object:
 
     for index, note in enumerate(notes):
         html_data[index] = {
+            "id": note.id,
             "title": note.title,
-            "user": {"first_name": note.user.first_name},
+            "content": note.content,
+            "created_at": note.created_at,
+            "due_date": note.due_date,
+            "is_complete": note.is_complete,
+            "priority": note.priority,
+            "user": {
+                "id": note.user.id,
+                "first_name": note.user.first_name,
+                "last_name": note.user.last_name,
+                "email": note.user.email,
+            },
         }
 
-    # context = {list: {"1" : {}, "2":{)}}}
+        """
+        EXAMPLE DATA
 
-    context = {"list": html_data}
+            context = {
+            0: {
+                    "id": UUID("ebfe6d73-6e7d-40e1-9e94-95d155680ebf"),
+                    "title": "New Create",
+                    "content": "New",
+                    "created_at": datetime.datetime(
+                        2023, 9, 25, 13, 26, 22, 240071, tzinfo=datetime.timezone.utc
+                    ),
+                    "due_date": datetime.datetime(
+                        2023, 9, 23, 20, 45, 37, 13440, tzinfo=datetime.timezone.utc
+                    ),
+                    "is_complete": False,
+                    "priority": 3,
+                    "user": {
+                        "id": UUID("49b052c8-7677-44be-88b1-6c15ebd03f9f"),
+                        "first_name": "Larry",
+                        "last_name": "Mall",
+                        "email": "michotall95@gmail.com",
+                    },
+                },
+            }
+        """
+
+    context = {"note_lists": html_data}
+
     return context
-
-    # render(request, "notes.html", context)
