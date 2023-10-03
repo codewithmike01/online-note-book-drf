@@ -11,203 +11,211 @@ from django.urls import reverse
 
 # password rerest
 from django.contrib.auth.tokens import PasswordResetTokenGenerator
-from django.utils.encoding import  force_bytes
+from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
+
+# Swagger Spectacular
+from drf_spectacular.utils import (
+    extend_schema_field,
+    extend_schema,
+    OpenApiParameter,
+    OpenApiExample,
+)
+from drf_spectacular.types import OpenApiTypes
 
 
 class RegisterApi(views.APIView):
+    @extend_schema(request=user_serializer.UserSerializer())
+    def post(self, request):
+        serializer = user_serializer.UserSerializer(data=request.data)
 
-  def post(self,request):
-    serializer = user_serializer.UserSerializer(data = request.data)
+        #  check validity
 
-    #  check validity
+        serializer.is_valid(raise_exception=True)
 
-    serializer.is_valid(raise_exception=True)
+        data = serializer.validated_data
 
-    data = serializer.validated_data
+        user_data = services.check_user_email(data.email)
 
-    user_data = services.check_user_email(data.email)
+        if user_data:
+            raise exceptions.NotAcceptable("Email already exist")
 
-    if user_data:
-      raise exceptions.NotAcceptable('Email already exist')
+        try:
+            serializer.instance = services.create_user(data)
 
-    serializer.instance = services.create_user(data)
+            # Token (To auth user on registraion successful)
+            token = services.create_token(serializer.data.get("id"))
 
-    # Token (To auth user on registraion successful)
-    token = services.create_token(serializer.data.get("id"))
+            # Send verification email
 
-    # Send verification email
+            current_site = get_current_site(request).domain
+            # relative_link = reverse(f"api/users/verify-email/{str(token)}")
 
-    current_site = get_current_site(request).domain
-    relative_link = reverse('verify-email')
+            absolute_url = (
+                "http://" + current_site + f"/api/users/verify-email/{str(token)}"
+            )
 
+            email_body = f'Hi {serializer.data.get("first_name")} {serializer.data.get("last_name")}, Please use the link below to verify your email. \n {absolute_url} '
 
-    absolute_url = 'http://' + current_site + relative_link+"?token="+str(token)
+            data = {
+                "subject": "Verify your email",
+                "body": email_body,
+                "user_email": serializer.data.get("email"),
+            }
 
-    email_body = f'Hi {serializer.data.get("first_name")} {serializer.data.get("last_name")}, Please use the link below to verify your email. \n {absolute_url} '
+            services.send_email(data)
+        except:
+            services.delete_user(serializer.data.get("id"))
+            raise exceptions.ErrorDetail("Error creating user")
 
-    data = {"subject": "Verify your email", "body": email_body , "user_email": serializer.data.get("email") }
+        resp = response.Response()
 
-    services.send_email(data)
+        resp.data = serializer.data
 
-    resp = response.Response()
-
-    resp.data = serializer.data
-
-    return resp
+        return resp
 
 
 class LoginApi(views.APIView):
-  def post(self , request):
-    email = request.data['email']
-    password = request.data['password']
+    # Swagger docs params
 
-    user_data = services.check_user_email(email)
+    @extend_schema(request=user_serializer.LoginSerializer())
+    def post(self, request):
+        serializer = user_serializer.LoginSerializer(data=request.data)
 
-    if  user_data  is None:
-      raise exceptions.AuthenticationFailed('Wrong credentials provided')
+        serializer.is_valid(raise_exception=True)
 
-    if not user_data.check_password(raw_password= password):
-      raise exceptions.AuthenticationFailed('Wrong credentials provided')
+        data = serializer.validated_data
 
+        user_data = services.check_user_email(data.email)
 
+        if user_data is None:
+            raise exceptions.AuthenticationFailed("Wrong credentials provided")
 
-    # Token
-    token = services.create_token(user_data.id)
+        if not user_data.check_password(raw_password=data.password):
+            raise exceptions.AuthenticationFailed("Wrong credentials provided")
 
+        # Token
+        token = services.create_token(user_data.id)
 
-    resp = response.Response()
+        resp = response.Response()
 
-    resp.set_cookie(key='jwt', value=token, httponly=True)
+        resp.set_cookie(key="jwt", value=token, httponly=True)
 
-    return resp
-
+        return resp
 
 
 class UserApi(views.APIView):
-  """
-  description: Endpoint to get current login user
+    """
+    description: Endpoint to get current login user
 
-  return: user: json
-  """
+    return: user: json
+    """
 
-  authentication_classes = (auth_user.CustomUserAuthentication, )
-  permission_classes = (permission.CustomPermision, )
+    authentication_classes = (auth_user.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
 
+    @extend_schema(responses=user_serializer.UserSerializer)
+    def get(self, request):
+        user = request.user
 
+        serializer = user_serializer.UserSerializer(user)
 
-  def get(self, request):
-    user = request.user
-
-    serializer = user_serializer.UserSerializer(user)
-
-    return response.Response(data = serializer.data)
-
+        return response.Response(data=serializer.data)
 
 
 class LogoutApi(views.APIView):
-  authentication_classes = (auth_user.CustomUserAuthentication, )
-  permission_classes = (permission.CustomPermision, )
+    authentication_classes = (auth_user.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
 
-  def post(self, request):
-
-    res = response.Response()
-
-    res.delete_cookie('jwt')
-    res.data = {"message": "Logged out Successfully"}
-    return res
-
-
-
-  # Verify User Email
-  #
-class VerifyEmailApi(views.APIView):
     def post(self, request):
-      token = request.GET.get('token')
+        res = response.Response()
 
-      user_data = services.verify_email_auth(token)
+        res.delete_cookie("jwt")
+        res.data = {"message": "Logged out Successfully"}
+        return res
 
-      resp = response.Response()
+    # Verify User Email
+    #
 
-      resp.set_cookie(key='jwt', value=token, httponly=True)
 
-      serializer = user_serializer.UserSerializer(user_data)
+class VerifyEmailApi(views.APIView):
+    def post(self, request, token):
+        # token = request.GET.get("token")
 
-      resp.data = serializer.data
+        print(token, "Token ")
 
-      return resp
+        user_data = services.verify_email_auth(token)
+
+        resp = response.Response()
+
+        resp.set_cookie(key="jwt", value=token, httponly=True)
+
+        serializer = user_serializer.UserSerializer(user_data)
+
+        resp.data = serializer.data
+
+        return resp
 
 
 class RequestPasswordReset(views.APIView):
-  def post(self, request):
-    serializer = user_serializer.EmailSerializer(data = request.data)
+    @extend_schema(request=user_serializer.EmailSerializer())
+    def post(self, request):
+        serializer = user_serializer.EmailSerializer(data=request.data)
 
-    serializer.is_valid(raise_exception= True)
+        serializer.is_valid(raise_exception=True)
 
-    data = serializer.validated_data
+        data = serializer.validated_data
 
-    user_data = services.check_user_email(data.get("email"))
+        user_data = services.check_user_email(data.get("email"))
 
-    if not  user_data:
-      raise exceptions.NotFound('Email does not exist')
+        if not user_data:
+            raise exceptions.NotFound("Email does not exist")
 
-    # Encode user id
-    uidb64 = urlsafe_base64_encode(force_bytes(user_data.id))
+        # Encode user id
+        uidb64 = urlsafe_base64_encode(force_bytes(user_data.id))
 
-    token = PasswordResetTokenGenerator().make_token(user_data)
+        token = PasswordResetTokenGenerator().make_token(user_data)
 
-    current_site = get_current_site(request).domain
+        current_site = get_current_site(request).domain
 
-    relative_link = reverse('reset_password_confirm', args=( uidb64,  token))
+        relative_link = reverse("reset_password_confirm", args=(uidb64, token))
 
-    absolute_url = 'http://' + current_site + relative_link
+        absolute_url = "http://" + current_site + relative_link
 
-    email_body = f'Hi,  \n Please use the link below to reset your password. \n {absolute_url} '
+        email_body = f"Hi,  \n Please use the link below to reset your password. \n {absolute_url} "
 
-    data = {"subject": "Reset your password", "body": email_body , "user_email": user_data.email }
+        data = {
+            "subject": "Reset your password",
+            "body": email_body,
+            "user_email": user_data.email,
+        }
 
-    services.send_email(data)
+        services.send_email(data)
 
-    return response.Response(data = {"message": "Password reset link sent!!"})
-
+        return response.Response(data={"message": "Password reset link sent!!"})
 
 
 class PasswordResetConfirmApi(views.APIView):
+    @extend_schema(request=user_serializer.PasswordResetSerializer())
+    def patch(self, request, token, uidb64, *args, **kwargs):
+        serializer = user_serializer.PasswordResetSerializer(data=request.data)
 
-  def patch(self, request, *args, **kwargs):
-    serializer = user_serializer.PasswordResetSerializer(data = request.data)
+        serializer.is_valid(raise_exception=True)
 
-    serializer.is_valid(raise_exception= True)
+        data = serializer.validated_data
 
-    data = serializer.validated_data
+        try:
+            user_id = urlsafe_base64_decode(uidb64).decode()
 
-    print(data.get('token'), 'DATA')
+        except:
+            raise exceptions.AuthenticationFailed("Unauthorized")
 
-    try:
-      user_id = urlsafe_base64_decode(data.get("uidb64")).decode()
+        user_dc, user = services.check_password_token(user_id, token)
 
-    except:
-      raise exceptions.AuthenticationFailed('Unauthorized ggHrt')
+        user.set_password(data.get("password"))
 
-    user_dc, user  = services.check_password_token(user_id, data.get("token"))
+        user.save()
 
-    user.set_password(data.get('password'))
+        user_data = user_serializer.UserSerializer(user_dc)
 
-    user.save()
-
-    user_data = user_serializer.UserSerializer(user_dc)
-
-
-    return response.Response(data = user_data.data , status=status.HTTP_200_OK)
-
-
-
-
-
-
-
-
-
-
-
-
+        return response.Response(data=user_data.data, status=status.HTTP_200_OK)

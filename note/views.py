@@ -10,9 +10,10 @@ from django.http import HttpResponse
 import csv
 
 #  covert html to pdf
-import pdfkit
 from django.template.loader import get_template
 import os
+
+from drf_spectacular.utils import extend_schema, OpenApiParameter
 
 
 # Create and Get user notes
@@ -20,6 +21,7 @@ class NoteApi(views.APIView):
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
+    @extend_schema(request=note_serializer.NoteSeralizer())
     def post(self, request):
         serializer = note_serializer.NoteSeralizer(data=request.data)
 
@@ -69,6 +71,7 @@ class NoteRetreiveUpdateDelete(views.APIView):
 
         return response.Response(status=rest_status.HTTP_204_NO_CONTENT)
 
+    @extend_schema(request=note_serializer.NoteSeralizer())
     def put(self, request, note_id):
         serializer = note_serializer.NoteSeralizer(data=request.data)
         serializer.is_valid(raise_exception=True)
@@ -158,6 +161,7 @@ class GenerateCSVApi(views.APIView):
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
+    @extend_schema(responses=note_serializer.NoteSeralizer)
     def get(self, request):
         notes = services.get_notes()
 
@@ -225,7 +229,7 @@ class GeneratePDFApi(views.APIView):
 
         print(html, "HTML")
 
-        pdf = pdfkit.from_string("Hello world", False)
+        # pdf = pdfkit.from_string("Hello world", False)
 
         # response = HttpResponse(pdf, content="application/pdf")
 

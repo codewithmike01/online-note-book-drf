@@ -1,4 +1,4 @@
-[
+ [
   {
     "first_name": "johnny",
     "last_name": "sam",
@@ -69,3 +69,21 @@
     "is_complete": true
   }
 ]
+
+
+"""Prints what the animals name is and what sound it makes.
+
+  If the argument `sound` isn't passed in, the default Animal
+  sound is used.
+
+  Parameters
+  ----------
+  sound : str, optional
+      The sound the animal makes (default is None)
+
+  Raises
+  ------
+  NotImplementedError
+      If no sound is set for the animal or passed in as a
+      parameter.
+"""

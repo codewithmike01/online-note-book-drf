@@ -26,7 +26,7 @@ urlpatterns = [
         name="order-created-at",
     ),
     path(
-        "<str:note_id>/",
+        "note/<str:note_id>/",
         apis.NoteRetreiveUpdateDelete.as_view(),
         name="Retreive update delete",
     ),

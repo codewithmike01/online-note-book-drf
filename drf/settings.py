@@ -35,11 +35,13 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     # Third parties
     "corsheaders",
+    "drf_spectacular",
     "rest_framework",
     # Apps
     "users",
     "note",
 ]
+
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
@@ -125,6 +127,21 @@ STATIC_URL = "static/"
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
+
+
+# For spectacualer Swagger
+REST_FRAMEWORK = {
+    # YOUR SETTINGS
+    "DEFAULT_SCHEMA_CLASS": "drf_spectacular.openapi.AutoSchema",
+}
+
+SPECTACULAR_SETTINGS = {
+    "TITLE": "Online Note",
+    "DESCRIPTION": "Online Note taker for Tunga company",
+    "VERSION": "1.0.0",
+    "SERVE_INCLUDE_SCHEMA": False,
+    # OTHER SETTINGS
+}
 
 
 # Specify Where user model is loacated

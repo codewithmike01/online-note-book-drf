@@ -1,0 +1,372 @@
+openapi: 3.0.3
+info:
+  title: Online Note
+  version: 1.0.0
+  description: Online Note taker for Tunga company
+paths:
+  /api/notes/:
+    get:
+      operationId: notes_retrieve
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/create/:
+    get:
+      operationId: notes_create_retrieve
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+    post:
+      operationId: notes_create_create
+      tags:
+      - notes
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteSeralizer'
+          description: ''
+  /api/notes/finished/:
+    get:
+      operationId: notes_finished_retrieve
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/generate-csv/:
+    get:
+      operationId: notes_generate_csv_retrieve
+      tags:
+      - notes
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteSeralizer'
+          description: ''
+  /api/notes/generate-pdf/:
+    post:
+      operationId: notes_generate_pdf_create
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/note/{note_id}/:
+    get:
+      operationId: notes_note_retrieve
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+    put:
+      operationId: notes_note_update
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notes
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/NoteSeralizer'
+          description: ''
+    delete:
+      operationId: notes_note_destroy
+      parameters:
+      - in: path
+        name: note_id
+        schema:
+          type: string
+        required: true
+      tags:
+      - notes
+      responses:
+        '204':
+          description: No response body
+  /api/notes/order-created-at/{order_arg}/:
+    get:
+      operationId: notes_order_created_at_retrieve
+      parameters:
+      - in: path
+        name: order_arg
+        schema:
+          type: string
+        required: true
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/order-duedate/{order_arg}/:
+    get:
+      operationId: notes_order_duedate_retrieve
+      parameters:
+      - in: path
+        name: order_arg
+        schema:
+          type: string
+        required: true
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/order-priority/{order_arg}/:
+    get:
+      operationId: notes_order_priority_retrieve
+      parameters:
+      - in: path
+        name: order_arg
+        schema:
+          type: string
+        required: true
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/overdue/:
+    get:
+      operationId: notes_overdue_retrieve
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/unfinished/:
+    get:
+      operationId: notes_unfinished_retrieve
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/users/login/:
+    post:
+      operationId: users_login_create
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/users/logout/:
+    post:
+      operationId: users_logout_create
+      tags:
+      - users
+      responses:
+        '200':
+          description: No response body
+  /api/users/me/:
+    get:
+      operationId: users_me_retrieve
+      description: |-
+        description: Endpoint to get current login user
+
+        return: user: json
+      tags:
+      - users
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/User'
+          description: ''
+  /api/users/register/:
+    post:
+      operationId: users_register_create
+      tags:
+      - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/User'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/User'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/User'
+        required: true
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+  /api/users/request-password-reset/:
+    post:
+      operationId: users_request_password_reset_create
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Email'
+          description: ''
+  /api/users/reset_password_confirm/{uidb64}/{token}/:
+    patch:
+      operationId: users_reset_password_confirm_partial_update
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
+      - in: path
+        name: uidb64
+        schema:
+          type: string
+        required: true
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/PasswordReset'
+          description: ''
+  /api/users/verify-email/:
+    post:
+      operationId: users_verify_email_create
+      tags:
+      - users
+      security:
+      - cookieAuth: []
+      - basicAuth: []
+      - {}
+      responses:
+        '200':
+          description: No response body
+components:
+  schemas:
+    Email:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+      required:
+      - email
+    NoteSeralizer:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        title:
+          type: string
+        content:
+          type: string
+        created_at:
+          type: string
+          format: date-time
+          readOnly: true
+        due_date:
+          type: string
+          format: date-time
+        priority:
+          type: integer
+        is_complete:
+          type: boolean
+        user:
+          allOf:
+          - $ref: '#/components/schemas/User'
+          readOnly: true
+      required:
+      - content
+      - created_at
+      - due_date
+      - id
+      - is_complete
+      - priority
+      - title
+      - user
+    PasswordReset:
+      type: object
+      properties:
+        token:
+          type: string
+        uidb64:
+          type: string
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - password
+      - token
+      - uidb64
+    User:
+      type: object
+      properties:
+        id:
+          type: string
+          format: uuid
+          readOnly: true
+        first_name:
+          type: string
+        last_name:
+          type: string
+        email:
+          type: string
+          format: email
+        password:
+          type: string
+          writeOnly: true
+        is_email_verified:
+          type: boolean
+          readOnly: true
+      required:
+      - email
+      - first_name
+      - id
+      - is_email_verified
+      - last_name
+      - password
+  securitySchemes:
+    basicAuth:
+      type: http
+      scheme: basic
+    cookieAuth:
+      type: apiKey
+      in: cookie
+      name: sessionid
