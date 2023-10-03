@@ -28,3 +28,6 @@ class Note(models.Model):
         validators=[MinValueValidator(1), MaxValueValidator(10)],
         verbose_name="Priority",
     )
+
+    def __str__(self) -> str:
+        return self.title
