@@ -25,6 +25,34 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass
 class UserDataClass:
+    """Defines the data struture of the user for response.
+
+    Class varibles
+    ----------
+    first_name : str
+        The user first name
+
+    last_name : str
+        The user last name
+
+    email : str
+        The user email
+
+    is_email_verified:
+      To check if email is real emailor not
+
+    password : str, default None
+        The user password
+
+    id : str, default None
+        The user id
+
+    Methods
+    ------
+    from_instance(cls, user)
+        Returns object of class
+    """
+
     first_name: str
     last_name: str
     email: str
@@ -43,19 +71,18 @@ class UserDataClass:
         )
 
 
-@dataclasses.dataclass
-class PasswordDataClass:
-    email: str
-    password: str
-
-    @classmethod
-    def from_instance(cls, user: "User") -> "PasswordDataClass":
-        return cls(
-            email=user.email,
-        )
-
-
 def create_user(user_dc: "UserDataClass") -> "UserDataClass":
+    """Create user
+
+    Parameter
+    ----------
+    User : User object instance
+        The user details
+
+    Returns
+    ------
+     Usr Data Class
+    """
     instance = models.User(
         first_name=user_dc.first_name,
         last_name=user_dc.last_name,
@@ -71,12 +98,35 @@ def create_user(user_dc: "UserDataClass") -> "UserDataClass":
 
 
 def check_user_email(email: str) -> "User":
+    """Get user by email (Checks if user exist)
+
+    Parameter
+    ----------
+    email : str
+        The user email
+
+    Return
+    ------
+     User: instance object
+    """
     user_email = models.User.objects.filter(email=email).first()
 
     return user_email
 
 
 def create_token(user_id: str) -> str:
+    """Creates user token
+
+    Parameter
+    ----------
+    user id : str
+        The user id
+
+    Return
+    ------
+     token: str
+    """
+
     payload = {
         "id": str(user_id),
         "exp": datetime.datetime.utcnow() + datetime.timedelta(hours=24),
@@ -89,6 +139,19 @@ def create_token(user_id: str) -> str:
 
 
 def send_email(data: dict) -> None:
+    """Send mail to user email address
+
+    Parameters
+    ----------
+    data : dict
+        Contains email subject , body , from and to
+
+
+    Exceptions
+    ------
+     Error Detals: If Eail not found
+    """
+
     email = EmailMessage(
         subject=data.get("subject"),
         body=data.get("body"),
@@ -103,6 +166,22 @@ def send_email(data: dict) -> None:
 
 
 def verify_email_auth(token) -> "UserDataClass":
+    """Verify token for email verification
+    Parameters
+    ----------
+
+    token : str,
+        The token sent to email for verification
+
+    Exceptions
+    ------
+      AuthenticaationFailed: is token is not valid or None
+
+    Returns
+    --------
+      USerDataClass
+    """
+
     if not token:
         raise exceptions.AuthenticationFailed("Unauthorized")
 
@@ -122,6 +201,20 @@ def verify_email_auth(token) -> "UserDataClass":
 
 
 def check_password_token(user_id: bytes, token: bytes) -> "User":
+    """Verify is password token is valid
+
+    Prameters
+    ----------
+    user id : str
+        The user id
+
+    token : str
+        The password token
+
+    Returns
+    ------
+      UserDataClass and User
+    """
     user = models.User.objects.get(id=user_id)
 
     #  Check if token is correct
@@ -132,5 +225,14 @@ def check_password_token(user_id: bytes, token: bytes) -> "User":
 
 
 def delete_user(user_id: str) -> None:
+    """Deletes a user from the DB.
+
+    Parameters
+    ----------
+
+    user id : str, default None
+        The user id
+
+    """
     user = models.User.objects.filter(id=user_id).first()
     user.delete()
