@@ -119,9 +119,13 @@ This are the folders and files relevant to this project.
 
 ### Backend APIs
 
+##### Swagger Docs
+
+`/api/schema/docs/`
+
 ##### User Apis
 
-1. Registration `/api/user/register/` (Post)
+1. Registration `/api/users/register/` (Post)
 
    - Payload
 
@@ -150,7 +154,7 @@ This are the folders and files relevant to this project.
 
    <br />
 
-2. Login `/api/user/login/` (Post)
+2. Login `/api/users/login/` (Post)
 
    - Payload
 
@@ -164,7 +168,7 @@ This are the folders and files relevant to this project.
    - Response 200
      <br />
 
-3. Logout `/api/user/logout/` (Post)
+3. Logout `/api/users/logout/` (Post)
 
    - Payload `None`
 
@@ -178,7 +182,7 @@ This are the folders and files relevant to this project.
 
    <br />
 
-4. Me `/api/user/me/` (Get)
+4. Me `/api/users/me/` (Get)
 
    - Payload `None`
 
@@ -196,7 +200,7 @@ This are the folders and files relevant to this project.
 
   <br />
 
-5. Email verification `/api/user/verify-email/` (Post)
+5. Email verification `/api/users/verify-email/` (Post)
 
 `Note: Verification link is sent to user and  when clicked they can verify thier email`
 
@@ -206,7 +210,7 @@ This are the folders and files relevant to this project.
 
    <br />
 
-5. Request password reset link `/api/user/request-password-reset/` (Post)
+5. Request password reset link `/api/users/request-password-reset/` (Post)
 
 `Note: Passsword Reset link is sent to user`
 
@@ -215,7 +219,7 @@ This are the folders and files relevant to this project.
 - Response 200
   <br />
 
-5. Confirm and reset password `/api/user/reset_password_confirm/<uidb64>/<token>/` (Post)
+5. Confirm and reset password `/api/users/reset_password_confirm/<uidb64>/<token>/` (Post)
 
 `Note: Passsword Reset link is sent to user`
 
@@ -245,7 +249,7 @@ This are the folders and files relevant to this project.
 
 ##### Note Apis
 
-1.  Create note `/api/note/create/` (Post)
+1.  Create note `/api/notes/create/` (Post)
 
 `Note: priority accepts min = 1 and max = 10`
 
@@ -283,7 +287,7 @@ This are the folders and files relevant to this project.
 
   <br />
 
-2. Get user notes `/api/note/create/` (Get)
+2. Get user notes `/api/notes/create/` (Get)
 
    - Response 200
 
@@ -309,7 +313,7 @@ This are the folders and files relevant to this project.
 
      <br />
 
-3. Get all notes `/api/note/` (Get)
+3. Get all notes `/api/notes/` (Get)
 
    - Response 200
 
@@ -333,12 +337,12 @@ This are the folders and files relevant to this project.
     ]
    ```
 
-4. Delete note `/api/note/<id: str>/` (Delete)
+4. Delete note `/api/notes/<id: str>/` (Delete)
 
    - Response 204
      <br />
 
-5. Update note `/api/note/<id: str>/` (Put)
+5. Update note `/api/notes/<id: str>/` (Put)
 
 - Payload
 
@@ -372,7 +376,7 @@ This are the folders and files relevant to this project.
    }
 ```
 
-5. Retreive note `/api/note/<id: str>/` (Get)
+5. Retreive note `/api/notes/<id: str>/` (Get)
 
 - Response 200
 
