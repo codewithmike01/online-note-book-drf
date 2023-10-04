@@ -71,6 +71,18 @@ class UserDataClass:
         )
 
 
+@dataclasses.dataclass
+class LoginDataClass:
+    email: str
+    password: str = None
+
+    @classmethod
+    def from_instance(cls, user: "User") -> "UserDataClass":
+        return cls(
+            email=user.email,
+        )
+
+
 def create_user(user_dc: "UserDataClass") -> "UserDataClass":
     """Create user
 

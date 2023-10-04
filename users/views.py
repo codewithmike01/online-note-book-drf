@@ -134,9 +134,6 @@ class LogoutApi(views.APIView):
         res.data = {"message": "Logged out Successfully"}
         return res
 
-    # Verify User Email
-    #
-
 
 class VerifyEmailApi(views.APIView):
     def post(self, request, token):

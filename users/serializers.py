@@ -36,3 +36,8 @@ class LoginSerializer(serializers.Serializer):
 
     class Meta:
         fields = ["email", "password"]
+
+    def to_internal_value(self, data):
+        data = super().to_internal_value(data)
+
+        return services.LoginDataClass(**data)
