@@ -191,12 +191,10 @@ def generate_pdf_html() -> object:
             "due_date": note.due_date,
             "is_complete": note.is_complete,
             "priority": note.priority,
-            "user": {
-                "id": note.user.id,
-                "first_name": note.user.first_name,
-                "last_name": note.user.last_name,
-                "email": note.user.email,
-            },
+            "user_id": note.user.id,
+            "first_name": note.user.first_name,
+            "last_name": note.user.last_name,
+            "email": note.user.email,
         }
 
         """
@@ -215,16 +213,17 @@ def generate_pdf_html() -> object:
                     ),
                     "is_complete": False,
                     "priority": 3,
-                    "user": {
-                        "id": UUID("49b052c8-7677-44be-88b1-6c15ebd03f9f"),
-                        "first_name": "Larry",
-                        "last_name": "Mall",
-                        "email": "michotall95@gmail.com",
-                    },
+                    "user_id": UUID("49b052c8-7677-44be-88b1-6c15ebd03f9f"),
+                    "first_name": "Larry",
+                    "last_name": "Mall",
+                    "email": "michotall95@gmail.com",
+
                 },
             }
         """
 
     context = {"note_lists": html_data}
+
+    print(context, "Cntext")
 
     return context

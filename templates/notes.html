@@ -1,23 +1,230 @@
 <!DOCTYPE html>
-<html lang="en">
+<html>
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Document</title>
+    <meta name="viewport" content="width=device-width" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>List</title>
+    <style>
+      @media only screen and (max-width: 620px) {
+        table[class='body'] h1 {
+          font-size: 28px !important;
+          margin-bottom: 10px !important;
+        }
+
+        table[class='body'] p,
+        table[class='body'] ul,
+        table[class='body'] ol,
+        table[class='body'] td,
+        table[class='body'] span,
+        table[class='body'] a {
+          font-size: 16px !important;
+        }
+
+        table[class='body'] .content {
+          padding: 0 !important;
+        }
+
+        table[class='body'] .container {
+          padding: 0 !important;
+          width: 100% !important;
+        }
+
+        table[class='body'] .main {
+          border-left-width: 0 !important;
+          border-radius: 0 !important;
+          border-right-width: 0 !important;
+        }
+
+
+        table[class='body'] .btn a {
+          width: 100% !important;
+        }
+
+
+      }
+      @media all {
+        .ExternalClass {
+          width: 100%;
+        }
+
+        .ExternalClass,
+        .ExternalClass p,
+        .ExternalClass span,
+        .ExternalClass font,
+        .ExternalClass td,
+        .ExternalClass div {
+          line-height: 100%;
+        }
+
+        .apple-link a {
+          color: inherit !important;
+          font-family: inherit !important;
+          font-size: inherit !important;
+          font-weight: inherit !important;
+          line-height: inherit !important;
+          text-decoration: none !important;
+        }
+
+        .btn-primary table td:hover {
+          background-color: #d5075d !important;
+        }
+
+        .btn-primary a:hover {
+          background-color: #d5075d !important;
+          border-color: #d5075d !important;
+        }
+      }
+    </style>
   </head>
-  <body>
-    <h1>Online Note List</h1>
+  <body
+    class
+    style="
+      background-color: #161f33;
+      font-family: sans-serif;
+      -webkit-font-smoothing: antialiased;
+      font-size: 14px;
+      line-height: 1.4;
+      margin: 0;
+      padding: 0;
+      -ms-text-size-adjust: 100%;
+      -webkit-text-size-adjust: 100%;
+    "
+  >
+       <div>
 
-    {% for key, value in note_lists.items%}
-    <h3>Note {{key}}</h3>
+          <table
+            role="presentation"
+            border="0"
+            cellpadding="0"
+            cellspacing="0"
+            style="
 
-    {%for k_note, v_note in value.items%}
+              min-width: 100%;
+              width: 100%;
+            "
+            width="100%"
+          >
+            <tr style="padding-bottom: 20px">
+              <td
+                class="align-center heading"
+                style="
+                  font-family: sans-serif;
+                  vertical-align: top;
+                  color: #0111a1;
+                  font-size: 25px;
+                  font-weight: bolder;
+                  text-align: center;
+                "
+                valign="top"
+                align="center"
+              >
+                Online Note
+              </td>
+            </tr>
+                  {% for key , value in note_lists.items%}
 
-    <p>{{k_note}} : {{v_note}}</p>
-    {% if k_note == 'user' %} {%for k_user, v_user in value.items%}
+                    <tr class="note__head"  style="padding-bottom: 5px" >
+                      <td
+                        style="
+                          font-family: sans-serif;
+                          font-size: 14px;
+                          font-weight: normal;
+                          margin: 0;
+                          color: #ec0867;
+                        "
+                      >
+                        Note {{key}}
+                      </td>
+                    </tr>
+                    {%for k_note, v_note in value.items%}
 
-    <p>{{k_user}} : {{v_user}}</p>
+                    <tr  style="padding-bottom: 3px">
+                      <td
+                        align="left"
+                        style="
+                          font-family: sans-serif;
+                          font-size: 14px;
+                          vertical-align: top;
+                        "
+                        valign="top"
+                      >
+                        {{k_note}} : {{v_note}}
+                      </td>
+                    </tr>
+                    {%endfor%}
 
-    {%endfor%} {% endif %} {%endfor%} {%endfor%}
+                    <tr  style="padding: 10px 0px">
+                      <td
+                        class="center__line"
+                        style="
+                          font-family: sans-serif;
+                          font-size: 14px;
+                          text-align: center;
+                          font-weight: bold;
+                          margin: 80px 0 !important;
+                        "
+                      >
+                        -------------------------------
+                      </td>
+                    </tr>
+                  {%endfor%}
+          </table>
+
+       </div>
+      <!-- START FOOTER -->
+      <div
+        class="footer"
+        style="clear: both; margin-top: 10px; text-align: center; width: 100%"
+      >
+        <table
+          role="presentation"
+          border="0"
+          cellpadding="0"
+          cellspacing="0"
+          style="
+            border-collapse: separate;
+            mso-table-lspace: 0pt;
+            mso-table-rspace: 0pt;
+            min-width: 100%;
+            width: 100%;
+          "
+          width="100%"
+        >
+          <tr>
+            <td
+              class="content-block powered-by"
+              style="
+                font-family: sans-serif;
+                vertical-align: top;
+                padding-bottom: 10px;
+                padding-top: 10px;
+                color: #9a9ea6;
+                font-size: 12px;
+                text-align: center;
+              "
+              valign="top"
+              align="center"
+            >
+              Powered by
+              <a
+                href="https://royalcodemate.com"
+                style="
+                  color: #9a9ea6;
+                  font-size: 12px;
+                  text-align: center;
+                  text-decoration: none;
+                "
+                >Royalcodemate</a
+              >.
+            </td>
+          </tr>
+        </table>
+      </div>
+      <!-- END FOOTER -->
+
+      <!-- END CENTERED WHITE CONTAINER -->
+
+
+    </tr>
   </body>
 </html>

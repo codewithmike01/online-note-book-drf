@@ -4,16 +4,23 @@ from users import permission, authentication as user_auth
 from . import serializers as note_serializer
 
 from . import services
+from . import models
+
 
 # For Http response Typing
 from django.http import HttpResponse
 import csv
 
 #  covert html to pdf
-from django.template.loader import get_template
-import os
+from django.template.loader import get_template, render_to_string
+from xhtml2pdf import pisa
+from io import BytesIO
 
-from drf_spectacular.utils import extend_schema, OpenApiParameter
+# from weasyprint import HTML
+# from easy_pdf.views import PDFTemplateResponseMixin, PDFTemplateView
+
+# For api docs
+from drf_spectacular.utils import extend_schema
 
 
 # Create and Get user notes
@@ -216,23 +223,27 @@ class GeneratePDFApi(views.APIView):
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
-    def post(self, request):
-        data = services.generate_pdf_html()
+    def get(self, request):
+        context = services.generate_pdf_html()
+        html_template = get_template("notes.html")
+        html_rendered = html_template.render(context)
 
-        # print(f"{os.getcwd()}/templates/notes.html")
+        result = BytesIO()
 
-        # path = os.getcwd()
+        pdf = pisa.pisaDocument(BytesIO(html_rendered.encode("ISO-8859-1")), result)
 
-        template = get_template("notes.html")
+        if pdf.err:
+            return HttpResponse(
+                "Invalid pdf",
+                status_code=status.HTTP_404_NOT_FOUND,
+                content_type="text/plain",
+            )
 
-        html = template.render(data)
-
-        print(html, "HTML")
-
-        # pdf = pdfkit.from_string("Hello world", False)
-
-        # response = HttpResponse(pdf, content="application/pdf")
+        response = HttpResponse(
+            result.getvalue(),
+            content_type="application/pdf",
+        )
 
         # response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
 
-        return response.Response(data="Hello Here")
+        return response
