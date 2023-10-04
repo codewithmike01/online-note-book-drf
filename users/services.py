@@ -172,7 +172,8 @@ def send_email(data: dict) -> None:
     )
 
     try:
-        email.send()
+        email.content_subtype = "html"
+        email.send(fail_silently=False)
     except:
         raise exceptions.ErrorDetail("Email not sent")
 

@@ -16,12 +16,12 @@ from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
 # Swagger Spectacular
 from drf_spectacular.utils import (
-    extend_schema_field,
     extend_schema,
-    OpenApiParameter,
-    OpenApiExample,
 )
-from drf_spectacular.types import OpenApiTypes
+
+
+#  covert html to pdf
+from django.template.loader import get_template
 
 
 class RegisterApi(views.APIView):
@@ -55,11 +55,18 @@ class RegisterApi(views.APIView):
                 "http://" + current_site + f"/api/users/verify-email/{str(token)}"
             )
 
-            email_body = f'Hi {serializer.data.get("first_name")} {serializer.data.get("last_name")}, Please use the link below to verify your email. \n {absolute_url} '
+            email_context = {
+                "text_greeting": f'Hi {serializer.data.get("first_name")} {serializer.data.get("last_name")}',
+                "text_content": " Please click on the button below to verify your email.",
+                "link": absolute_url,
+                "btn_text": "Proceed to verify email",
+            }
+
+            html_template = get_template("user_notice.html").render(email_context)
 
             data = {
                 "subject": "Verify your email",
-                "body": email_body,
+                "body": html_template,
                 "user_email": serializer.data.get("email"),
             }
 
@@ -179,11 +186,18 @@ class RequestPasswordReset(views.APIView):
 
         absolute_url = "http://" + current_site + relative_link
 
-        email_body = f"Hi,  \n Please use the link below to reset your password. \n {absolute_url} "
+        email_context = {
+            "text_greeting": "Hi,",
+            "text_content": "Please click on the button below to reset your password.",
+            "link": absolute_url,
+            "btn_text": "Proceed to reset password.",
+        }
+
+        html_template = get_template("user_notice.html").render(email_context)
 
         data = {
             "subject": "Reset your password",
-            "body": email_body,
+            "body": html_template,
             "user_email": user_data.email,
         }
 

@@ -244,6 +244,23 @@ class GeneratePDFApi(views.APIView):
             content_type="application/pdf",
         )
 
-        response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
+        # response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
 
         return response
+
+
+class SendNotesToMail(views.APIView):
+    authentication_classes = (user_auth.CustomUserAuthentication,)
+    permission_classes = (permission.CustomPermision,)
+
+    def post(self, request):
+        context = services.generate_pdf_html()
+        html_template = get_template("notes.html").render(context)
+
+        email_data = {
+            "subject": "List of all Note",
+            "to": request.user.email,
+        }
+        services.send_email(html_template, email_data)
+
+        return response.Response(data={"message": "Note sent to mail Successfully!!"})

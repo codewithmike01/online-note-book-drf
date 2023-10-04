@@ -1,6 +1,7 @@
 import dataclasses
 import datetime
 from rest_framework import exceptions
+from django.conf import settings
 from users import services as user_services
 from . import models
 
@@ -10,6 +11,9 @@ from django.template import Template, Context
 
 # To validate uuid passed in api
 from uuid import UUID
+
+# Email
+from django.core.mail import EmailMessage
 
 from typing import TYPE_CHECKING
 
@@ -227,3 +231,34 @@ def generate_pdf_html() -> object:
     print(context, "Cntext")
 
     return context
+
+
+def send_email(html_template: str, email_data: dict) -> None:
+    """Send mail to user email address
+
+    Parameters
+    ----------
+    html_template : str
+        Contains email  body (html)
+
+    data: dict
+        Contains email subject, and to (reciever)
+
+
+    Exceptions
+    ------
+     Error Detals: If Eail not found
+    """
+
+    email = EmailMessage(
+        subject=email_data.get("subject"),
+        body=html_template,
+        from_email=settings.EMAIL_HOST_USER,
+        to=[email_data.get("to")],
+    )
+
+    try:
+        email.content_subtype = "html"
+        email.send(fail_silently=False)
+    except:
+        raise exceptions.ErrorDetail("Email not sent")

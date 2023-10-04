@@ -10,6 +10,7 @@ urlpatterns = [
     path("overdue/", apis.OverDueNoteApi.as_view(), name="overdue"),
     path("generate-csv/", apis.GenerateCSVApi.as_view(), name="Generate csv"),
     path("generate-pdf/", apis.GeneratePDFApi.as_view(), name="Generate pdf"),
+    path("mail-notes/", apis.SendNotesToMail.as_view(), name="mail notes"),
     path(
         "order-duedate/<str:order_arg>/",
         apis.OrderNoteDueDateApi.as_view(),
