@@ -244,6 +244,6 @@ class GeneratePDFApi(views.APIView):
             content_type="application/pdf",
         )
 
-        # response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
+        response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
 
         return response
