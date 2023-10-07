@@ -94,24 +94,24 @@ This are the folders and files relevant to this project.
 
 ```doc
 ├── drf # Project file
-' ├── settings.py
-' ├── urls.py
+  ├── settings.py
+  ├── urls.py
 ├── note # Note app <br>
-' ├── admin.py
-' ├── models.py
-' ├── serializers.py
-....├── services.py
-....├── urls.py
-....├── views.py
+  ├── admin.py
+  ├── models.py
+  ├── serializers.py
+  ├── services.py
+  ├── urls.py
+  ├── views.py
 ├── users # User app
-....├── admin.py
-....├── authentication.py # Custom authentication
-....├── models.py
-....├── permission.py # Custom permision
-....├── serializers.py
-....├── services.py
-....├── urls.py
-....├── views.py
+  ├── admin.py
+  ├── authentication.py # Custom authentication
+  ├── models.py
+  ├── permission.py # Custom permision
+  ├── serializers.py
+  ├── services.py
+  ├── urls.py
+  ├── views.py
 ├── manage.py
 ├── README.md
 ├── requirements.txt
