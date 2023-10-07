@@ -92,6 +92,7 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
 
 This are the folders and files relevant to this project.
 
+```doc
 ├── drf # Project file
 ' ├── settings.py
 ' ├── urls.py
@@ -114,6 +115,7 @@ This are the folders and files relevant to this project.
 ├── manage.py
 ├── README.md
 ├── requirements.txt
+```
 
   <br />
 
