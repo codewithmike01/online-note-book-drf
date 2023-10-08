@@ -16,7 +16,7 @@ urlpatterns = [
         name="request_password_email",
     ),
     path(
-        "reset_password_confirm/<uidb64>/<token>/",
+        "reset_password_confirm/<str:uidb64>/<str:token>/",
         apis.PasswordResetConfirmApi.as_view(),
         name="reset_password_confirm",
     ),

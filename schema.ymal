@@ -24,13 +24,21 @@ paths:
       operationId: notes_create_create
       tags:
       - notes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteSeralizer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NoteSeralizer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NoteSeralizer'
+        required: true
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NoteSeralizer'
-          description: ''
+          description: No response body
   /api/notes/finished/:
     get:
       operationId: notes_finished_retrieve
@@ -52,8 +60,16 @@ paths:
                 $ref: '#/components/schemas/NoteSeralizer'
           description: ''
   /api/notes/generate-pdf/:
+    get:
+      operationId: notes_generate_pdf_retrieve
+      tags:
+      - notes
+      responses:
+        '200':
+          description: No response body
+  /api/notes/mail-notes/:
     post:
-      operationId: notes_generate_pdf_create
+      operationId: notes_mail_notes_create
       tags:
       - notes
       responses:
@@ -83,13 +99,21 @@ paths:
         required: true
       tags:
       - notes
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/NoteSeralizer'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/NoteSeralizer'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/NoteSeralizer'
+        required: true
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/NoteSeralizer'
-          description: ''
+          description: No response body
     delete:
       operationId: notes_note_destroy
       parameters:
@@ -166,6 +190,18 @@ paths:
       operationId: users_login_create
       tags:
       - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Login'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Login'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Login'
+        required: true
       security:
       - cookieAuth: []
       - basicAuth: []
@@ -226,17 +262,25 @@ paths:
       operationId: users_request_password_reset_create
       tags:
       - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/Email'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/Email'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/Email'
+        required: true
       security:
       - cookieAuth: []
       - basicAuth: []
       - {}
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/Email'
-          description: ''
+          description: No response body
   /api/users/reset_password_confirm/{uidb64}/{token}/:
     patch:
       operationId: users_reset_password_confirm_partial_update
@@ -253,20 +297,33 @@ paths:
         required: true
       tags:
       - users
+      requestBody:
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/PatchedPasswordReset'
+          application/x-www-form-urlencoded:
+            schema:
+              $ref: '#/components/schemas/PatchedPasswordReset'
+          multipart/form-data:
+            schema:
+              $ref: '#/components/schemas/PatchedPasswordReset'
       security:
       - cookieAuth: []
       - basicAuth: []
       - {}
       responses:
         '200':
-          content:
-            application/json:
-              schema:
-                $ref: '#/components/schemas/PasswordReset'
-          description: ''
-  /api/users/verify-email/:
+          description: No response body
+  /api/users/verify-email/{token}:
     post:
       operationId: users_verify_email_create
+      parameters:
+      - in: path
+        name: token
+        schema:
+          type: string
+        required: true
       tags:
       - users
       security:
@@ -286,6 +343,19 @@ components:
           format: email
       required:
       - email
+    Login:
+      type: object
+      properties:
+        email:
+          type: string
+          format: email
+          writeOnly: true
+        password:
+          type: string
+          writeOnly: true
+      required:
+      - email
+      - password
     NoteSeralizer:
       type: object
       properties:
@@ -321,20 +391,16 @@ components:
       - priority
       - title
       - user
-    PasswordReset:
+    PatchedPasswordReset:
       type: object
       properties:
+        password:
+          type: string
+          writeOnly: true
         token:
           type: string
         uidb64:
           type: string
-        password:
-          type: string
-          writeOnly: true
-      required:
-      - password
-      - token
-      - uidb64
     User:
       type: object
       properties:

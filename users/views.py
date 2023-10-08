@@ -144,10 +144,6 @@ class LogoutApi(views.APIView):
 
 class VerifyEmailApi(views.APIView):
     def post(self, request, token):
-        # token = request.GET.get("token")
-
-        print(token, "Token ")
-
         user_data = services.verify_email_auth(token)
 
         resp = response.Response()
@@ -208,7 +204,7 @@ class RequestPasswordReset(views.APIView):
 
 class PasswordResetConfirmApi(views.APIView):
     @extend_schema(request=user_serializer.PasswordResetSerializer())
-    def patch(self, request, token, uidb64, *args, **kwargs):
+    def patch(self, request, token: str, uidb64: str, *args, **kwargs):
         serializer = user_serializer.PasswordResetSerializer(data=request.data)
 
         serializer.is_valid(raise_exception=True)
