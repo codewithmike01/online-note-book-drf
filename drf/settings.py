@@ -80,16 +80,34 @@ WSGI_APPLICATION = "drf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
+# if "RDS_HOSTNAME" in os.environ:
 DATABASES = {
     "default": {
         "ENGINE": "django.db.backends.mysql",
-        "NAME": "online_note",
+        # "USER": os.environ["RDS_USERNAME"],
+        # "NAME": os.environ["RDS_DB_NAME"],
+        # "PASSWORD": os.environ["RDS_PASSWORD"],
+        # "HOST": os.environ["RDS_HOSTNAME"],
+        # "PORT": os.environ["RDS_PORT"],
         "USER": "kanu",
-        "PASSWORD": "password",
-        "HOST": "localhost",
         "PORT": "3306",
+        "NAME": "online_note",
+        "PASSWORD": "PdduRv6ukov531bGl8T5",
+        "HOST": "onlinenote.cwlpmpzbzqzx.us-west-2.rds.amazonaws.com",
     }
 }
+
+# else:
+# DATABASES = {
+#     "default": {
+#         "ENGINE": "django.db.backends.mysql",
+#         "NAME": "online_note",
+#         "USER": "kanu",
+#         "PASSWORD": "password",
+#         "HOST": "localhost",
+#         "PORT": "3306",
+#     }
+# }
 
 
 # Password validation
@@ -126,7 +144,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.2/howto/static-files/
 
-STATIC_URL = "static/"
+
+STATIC_URL = "/static/"
+STATIC_ROOT = "static"
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.2/ref/settings/#default-auto-field
