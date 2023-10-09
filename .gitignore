@@ -17,6 +17,7 @@ data
 !.elasticbeanstalk/*.global.yml
 .Python
 venv/
+eb-ve/
 .env
 *.sqlite3
 build/
