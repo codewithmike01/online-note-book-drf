@@ -6,6 +6,11 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
+# import pymysql
+
+# pymysql.version_info = (1, 4, 3, "final", 0)
+# pymysql.install_as_MySQLdb()
+
 from corsheaders.defaults import default_methods, default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -20,9 +25,9 @@ SECRET_KEY = os.environ.get("SECRET_KEY")
 JWT_KEY = os.environ.get("JWT_KEY")
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = False
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
 
 
 # Application definition
@@ -80,34 +85,29 @@ WSGI_APPLICATION = "drf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-# if "RDS_HOSTNAME" in os.environ:
-DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.mysql",
-        # "USER": os.environ["RDS_USERNAME"],
-        # "NAME": os.environ["RDS_DB_NAME"],
-        # "PASSWORD": os.environ["RDS_PASSWORD"],
-        # "HOST": os.environ["RDS_HOSTNAME"],
-        # "PORT": os.environ["RDS_PORT"],
-        "USER": "kanu",
-        "PORT": "3306",
-        "NAME": "online_note",
-        "PASSWORD": "PdduRv6ukov531bGl8T5",
-        "HOST": "onlinenote.cwlpmpzbzqzx.us-west-2.rds.amazonaws.com",
+if not DEBUG:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "USER": os.environ.get("DB_USERNAME"),
+            "NAME": os.environ.get("DB_NAME"),
+            "PASSWORD": os.environ.get("DB_PASSWORD"),
+            "HOST": os.environ.get("DB_HOSTNAME"),
+            "PORT": "3306",
+        }
     }
-}
 
-# else:
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.mysql",
-#         "NAME": "online_note",
-#         "USER": "kanu",
-#         "PASSWORD": "password",
-#         "HOST": "localhost",
-#         "PORT": "3306",
-#     }
-# }
+else:
+    DATABASES = {
+        "default": {
+            "ENGINE": "django.db.backends.mysql",
+            "NAME": "online_note",
+            "USER": "kanu",
+            "PASSWORD": "password",
+            "HOST": "localhost",
+            "PORT": "3306",
+        }
+    }
 
 
 # Password validation
@@ -178,7 +178,8 @@ CORS_ALLOW_CREDENTIALS = True
 CORS_ALLOWED_ORIGINS = [
     "http://localhost:8080",
     "http://localhost:3000",
-    "http://127.0.0.1:9000",
+    "http://127.0.0.1:8000",
+    "http://0.0.0.0:8000",
 ]
 CORS_ALLOW_METHODS = (*default_methods,)
 CORS_ALLOW_HEADERS = (*default_headers,)
