@@ -12,6 +12,7 @@ data
 
 
 # Distribution / packaging
+.vscode
 Dockerfile
 Dockerrun.aws.json
 .elasticbeanstalk
