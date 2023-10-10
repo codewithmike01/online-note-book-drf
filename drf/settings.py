@@ -31,7 +31,7 @@ ALLOWED_HOSTS = [
     "0.0.0.0",
     "localhost",
     "127.0.0.1",
-    "ec2-35-92-144-104.us-west-2.compute.amazonaws.com",
+    "44.241.249.189",
 ]
 
 
@@ -185,7 +185,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000",
     "http://0.0.0.0:8000",
-    "http://ec2-35-92-144-104.us-west-2.compute.amazonaws.com",
+    "http://44.241.249.189:8000",
 ]
 CORS_ALLOW_METHODS = (*default_methods,)
 CORS_ALLOW_HEADERS = (*default_headers,)
