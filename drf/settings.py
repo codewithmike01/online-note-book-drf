@@ -27,7 +27,12 @@ JWT_KEY = os.environ.get("JWT_KEY")
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = False
 
-ALLOWED_HOSTS = ["0.0.0.0", "localhost", "127.0.0.1"]
+ALLOWED_HOSTS = [
+    "0.0.0.0",
+    "localhost",
+    "127.0.0.1",
+    "ec2-35-92-144-104.us-west-2.compute.amazonaws.com",
+]
 
 
 # Application definition
@@ -180,6 +185,7 @@ CORS_ALLOWED_ORIGINS = [
     "http://localhost:3000",
     "http://127.0.0.1:8000",
     "http://0.0.0.0:8000",
+    "http://ec2-35-92-144-104.us-west-2.compute.amazonaws.com",
 ]
 CORS_ALLOW_METHODS = (*default_methods,)
 CORS_ALLOW_HEADERS = (*default_headers,)
