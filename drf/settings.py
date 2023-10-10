@@ -90,7 +90,9 @@ WSGI_APPLICATION = "drf.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/4.2/ref/settings/#databases
 
-if DEBUG:
+
+
+if os.environ.get("SSH_CLIENT", None) != None:
     DATABASES = {
         "default": {
             "ENGINE": "django.db.backends.mysql",
