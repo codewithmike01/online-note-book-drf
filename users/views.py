@@ -73,7 +73,10 @@ class RegisterApi(views.APIView):
             services.send_email(data)
         except:
             services.delete_user(serializer.data.get("id"))
-            raise exceptions.ErrorDetail("Error creating user")
+            return response.Response(
+                data={"message": "User not created"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         resp = response.Response()
 
