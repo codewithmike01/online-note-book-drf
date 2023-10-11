@@ -16,8 +16,9 @@ from django.template.loader import get_template, render_to_string
 from xhtml2pdf import pisa
 from io import BytesIO
 
-# from weasyprint import HTML
-# from easy_pdf.views import PDFTemplateResponseMixin, PDFTemplateView
+# Async
+import asyncio
+
 
 # For api docs
 from drf_spectacular.utils import extend_schema
@@ -244,7 +245,7 @@ class GeneratePDFApi(views.APIView):
             content_type="application/pdf",
         )
 
-        # response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
+        response["Content-Disposition"] = 'attachment; filename="notes.pdf"'
 
         return response
 
@@ -255,7 +256,8 @@ class SendNotesToMail(views.APIView):
 
     def post(self, request):
         context = services.generate_pdf_html()
-        html_template = get_template("notes.html").render(context)
+
+        html_template = asyncio.run(services.get_html_template(context))
 
         email_data = {
             "subject": "List of all Note",

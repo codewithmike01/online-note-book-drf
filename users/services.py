@@ -3,7 +3,7 @@ from . import models
 from rest_framework import exceptions
 
 # Email
-from django.core.mail import EmailMessage
+from django.core.mail import send_mail
 
 # For jwt
 import datetime
@@ -21,6 +21,9 @@ from typing import TYPE_CHECKING
 
 if TYPE_CHECKING:
     from users.models import User
+
+#  covert html to pdf
+from django.template.loader import get_template
 
 
 @dataclasses.dataclass
@@ -164,15 +167,18 @@ def send_email(data: dict) -> None:
      Error Detals: If Eail not found
     """
 
-    email = EmailMessage(
+    send_mail(
+        html_message=data.get("body"),
+        fail_silently=False,
         subject=data.get("subject"),
-        body=data.get("body"),
+        recipient_list=[data.get("user_email")],
         from_email=settings.EMAIL_HOST_USER,
-        to=[data.get("user_email")],
+        message="html_message",
     )
 
-    email.content_subtype = "html"
-    email.send(fail_silently=False)
+
+async def get_html_template(context):
+    return get_template("user_notice.html").render(context)
 
 
 def verify_email_auth(token) -> "UserDataClass":

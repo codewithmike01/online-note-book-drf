@@ -14,14 +14,13 @@ from django.contrib.auth.tokens import PasswordResetTokenGenerator
 from django.utils.encoding import force_bytes
 from django.utils.http import urlsafe_base64_encode, urlsafe_base64_decode
 
+# Async
+import asyncio
+
 # Swagger Spectacular
 from drf_spectacular.utils import (
     extend_schema,
 )
-
-
-#  covert html to pdf
-from django.template.loader import get_template
 
 
 class RegisterApi(views.APIView):
@@ -62,7 +61,8 @@ class RegisterApi(views.APIView):
                 "btn_text": "Proceed to verify email",
             }
 
-            html_template = get_template("user_notice.html").render(email_context)
+            # Await template creation
+            html_template = asyncio.run(services.get_html_template(email_context))
 
             data = {
                 "subject": "Verify your email",
@@ -74,7 +74,7 @@ class RegisterApi(views.APIView):
         except:
             services.delete_user(serializer.data.get("id"))
             return response.Response(
-                data={"message": "User not created due to Email sending Error"},
+                data={"message": "SMTP Connect error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
@@ -192,7 +192,7 @@ class RequestPasswordReset(views.APIView):
             "btn_text": "Proceed to reset password.",
         }
 
-        html_template = get_template("user_notice.html").render(email_context)
+        html_template = asyncio.run(services.get_html_template(email_context))
 
         data = {
             "subject": "Reset your password",
@@ -204,7 +204,7 @@ class RequestPasswordReset(views.APIView):
             services.send_email(data)
         except:
             return response.Response(
-                data={"message": "Email sending Error"},
+                data={"message": "SMTP Connect error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
