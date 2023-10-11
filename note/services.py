@@ -1,6 +1,6 @@
 import dataclasses
 import datetime
-from rest_framework import exceptions
+from rest_framework import exceptions, response, status
 from django.conf import settings
 from users import services as user_services
 from . import models
@@ -13,7 +13,9 @@ from django.template import Template, Context
 from uuid import UUID
 
 # Email
-from django.core.mail import EmailMessage
+from django.core.mail import EmailMessage, send_mail
+
+from django.template.loader import get_template
 
 from typing import TYPE_CHECKING
 
@@ -228,9 +230,11 @@ def generate_pdf_html() -> object:
 
     context = {"note_lists": html_data}
 
-    print(context, "Cntext")
-
     return context
+
+
+async def get_html_template(context):
+    return get_template("notes.html").render(context)
 
 
 def send_email(html_template: str, email_data: dict) -> None:
@@ -250,15 +254,17 @@ def send_email(html_template: str, email_data: dict) -> None:
      Error Detals: If Eail not found
     """
 
-    email = EmailMessage(
-        subject=email_data.get("subject"),
-        body=html_template,
-        from_email=settings.EMAIL_HOST_USER,
-        to=[email_data.get("to")],
-    )
-
     try:
-        email.content_subtype = "html"
-        email.send(fail_silently=False)
+        send_mail(
+            html_message=html_template,
+            fail_silently=False,
+            subject=email_data.get("subject"),
+            recipient_list=[email_data.get("to")],
+            from_email=settings.EMAIL_HOST_USER,
+            message="html_message",
+        )
     except:
-        raise exceptions.ErrorDetail("Email not sent")
+        return response.Response(
+            data={"message": "SMTP Connect error"},
+            status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+        )
