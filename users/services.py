@@ -171,11 +171,8 @@ def send_email(data: dict) -> None:
         to=[data.get("user_email")],
     )
 
-    try:
-        email.content_subtype = "html"
-        email.send(fail_silently=False)
-    except:
-        raise exceptions.ErrorDetail("Email not sent")
+    email.content_subtype = "html"
+    email.send(fail_silently=False)
 
 
 def verify_email_auth(token) -> "UserDataClass":

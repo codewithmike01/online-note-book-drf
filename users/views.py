@@ -74,7 +74,7 @@ class RegisterApi(views.APIView):
         except:
             services.delete_user(serializer.data.get("id"))
             return response.Response(
-                data={"message": "User not created"},
+                data={"message": "User not created due to Email sending Error"},
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
@@ -200,7 +200,13 @@ class RequestPasswordReset(views.APIView):
             "user_email": user_data.email,
         }
 
-        services.send_email(data)
+        try:
+            services.send_email(data)
+        except:
+            return response.Response(
+                data={"message": "Email sending Error"},
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR,
+            )
 
         return response.Response(data={"message": "Password reset link sent!!"})
 

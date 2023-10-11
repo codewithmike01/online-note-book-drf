@@ -25,11 +25,9 @@ class EmailSerializer(serializers.Serializer):
 
 class PasswordResetSerializer(serializers.Serializer):
     password = serializers.CharField(write_only=True)
-    token = serializers.CharField()
-    uidb64 = serializers.CharField()
 
     class Meta:
-        fields = ["password", "token", "uidb64"]
+        fields = ["password"]
 
 
 class LoginSerializer(serializers.Serializer):

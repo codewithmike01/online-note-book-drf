@@ -196,7 +196,7 @@ CORS_ALLOW_HEADERS = (*default_headers,)
 
 # Email Setup
 EMAIL_USE_TLS = True
-EMAIL_HOST = "smtp.gmail.com"
+EMAIL_HOST = "Smtp.gmail.com"
 EMAIL_PORT = 587
 EMAIL_HOST_USER = os.environ.get("HOST_EMAIL_USER")
 EMAIL_HOST_PASSWORD = os.environ.get("HOST_EMAIL_PASSWORD")
