@@ -5,7 +5,7 @@ __pycache__/
 migrations/
 media/
 settings.py
-data
+data.txt
 # C extensions
 *.so
 
