@@ -29,7 +29,6 @@ class RegisterApi(views.APIView):
         serializer = user_serializer.UserSerializer(data=request.data)
 
         #  check validity
-
         serializer.is_valid(raise_exception=True)
 
         data = serializer.validated_data
@@ -45,10 +44,8 @@ class RegisterApi(views.APIView):
             # Token (To auth user on registraion successful)
             token = services.create_token(serializer.data.get("id"))
 
-            # Send verification email
-
+            # Get url domain
             current_site = get_current_site(request).domain
-            # relative_link = reverse(f"api/users/verify-email/{str(token)}")
 
             absolute_url = (
                 "http://" + current_site + f"/api/users/verify-email/{str(token)}"
