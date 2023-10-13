@@ -257,12 +257,15 @@ class SendNotesToMail(views.APIView):
     def post(self, request):
         context = services.generate_pdf_html()
 
+        # To make email html template creation  async
         html_template = asyncio.run(services.get_html_template(context))
 
         email_data = {
             "subject": "List of all Note",
             "to": request.user.email,
         }
+
+        # Send mail with generated contents
         services.send_email(html_template, email_data)
 
         return response.Response(data={"message": "Note sent to mail Successfully!!"})
