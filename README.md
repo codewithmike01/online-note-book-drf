@@ -38,7 +38,7 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
 
 8. Export notes list to pdf and csv
 
-9. Share or publish th notes over an email
+9. Share or publish the notes over an email
 
 10. Set email reminder for notes
 
@@ -88,6 +88,59 @@ The online Notes is be use by staff to log thier personal notes. The online noe 
 
     <br />
 
+###### Alternative startup
+
+They is a build.sh script that can be used to setup and run the project for you, following the steps below
+
+1.  Clone the project into your machine.
+
+    ```cmd
+          git clone https://github.com/Ginohmk/online-note-book-drf.git
+    ```
+
+2.  Navigate into the project folder.
+
+    ```cmd
+       cd online-note-book-drf
+    ```
+
+3.  Start your virtual environment (mac/linux and windows)
+
+    ```cmd
+      source/bin/activate
+    ```
+
+    Or for windows
+
+    ```cmd
+      \venv\Scripts\activate.bat
+    ```
+
+4.  Make build.sh executable
+
+```cmd
+chmod +x build.sh
+```
+
+5. Run the excutable script
+
+```cmd
+./build.sh
+```
+
+<br />
+
+##### Key Note
+
+This application may not work as it should on your local machine, Due to the fact that it is missing some environment variables, This variable are private to a user and as such i have created a spot for you to input yours by editing the `Enter yours` found in settings.py. You can it on the following:
+
+- SECRET_KEY
+- JWT_KEY
+- EMAIL_HOST_USER : For this you can use your personal email address(G-mail).
+- EMAIL_HOST_PASSWORD: For this you can use you email(G-mail) [App Password](https://support.google.com/mail/answer/185833?hl=en#:~:text=Under%20%22Signing%20in%20to%20Google,Select%20Generate.)
+
+<br />
+
 ### Folder Structure
 
 This are the folders and files relevant to this project.
@@ -112,6 +165,7 @@ This are the folders and files relevant to this project.
   ├── services.py
   ├── urls.py
   ├── views.py
+├── build.sh
 ├── manage.py
 ├── README.md
 ├── requirements.txt
@@ -401,6 +455,7 @@ This are the folders and files relevant to this project.
 ```
 
 <br/>
+
 ### Author
 
 👤 **Kanu Mike**
@@ -418,6 +473,8 @@ Contributions, issues, and feature requests are welcome!
 Feel free to check the [issues page](https://github.com/Ginohmk/online-note-book-drf/issues)
 
 ### Acknowledgement
+
+I want to acknowledge Tunga Impact Academy, for thier support, training and for time taken to nuture and improve my backend skill as a Django Rest Framework Developer.
 
 ## Show your support
 
