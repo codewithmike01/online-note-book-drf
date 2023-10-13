@@ -78,7 +78,7 @@ class RegisterApi(views.APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        resp = response.Response()
+        resp = response.Response(status=status.HTTP_201_CREATED)
 
         resp.data = serializer.data
 
@@ -107,7 +107,9 @@ class LoginApi(views.APIView):
         # Token
         token = services.create_token(user_data.id)
 
-        resp = response.Response()
+        resp = response.Response(
+            data={"message": "Successfully logged in"}, status=status.HTTP_200_OK
+        )
 
         resp.set_cookie(key="jwt", value=token, httponly=True)
 
@@ -135,7 +137,6 @@ class UserApi(views.APIView):
 
 class LogoutApi(views.APIView):
     authentication_classes = (auth_user.CustomUserAuthentication,)
-    permission_classes = (permission.CustomPermision,)
 
     def post(self, request):
         res = response.Response()
