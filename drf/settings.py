@@ -6,11 +6,6 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-# import pymysql
-
-# pymysql.version_info = (1, 4, 3, "final", 0)
-# pymysql.install_as_MySQLdb()
-
 from corsheaders.defaults import default_methods, default_headers
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.

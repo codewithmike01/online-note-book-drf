@@ -96,10 +96,16 @@ class LoginApi(views.APIView):
         user_data = services.check_user_email(data.email)
 
         if user_data is None:
-            raise exceptions.AuthenticationFailed("Wrong credentials provided")
+            return response.Response(
+                data={"message": "Wrong credentials provided"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
         if not user_data.check_password(raw_password=data.password):
-            raise exceptions.AuthenticationFailed("Wrong credentials provided")
+            return response.Response(
+                data={"message": "Wrong credentials provided"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
         # Token
         token = services.create_token(user_data.id)
@@ -175,6 +181,7 @@ class RequestPasswordReset(views.APIView):
         # Encode user id
         uidb64 = urlsafe_base64_encode(force_bytes(user_data.id))
 
+        # Generate password reset token
         token = PasswordResetTokenGenerator().make_token(user_data)
 
         current_site = get_current_site(request).domain
@@ -206,7 +213,9 @@ class RequestPasswordReset(views.APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        return response.Response(data={"message": "Password reset link sent!!"})
+        return response.Response(
+            data={"message": "Password reset link sent!!"}, status=status.HTTP_200_OK
+        )
 
 
 class PasswordResetConfirmApi(views.APIView):
@@ -222,7 +231,10 @@ class PasswordResetConfirmApi(views.APIView):
             user_id = urlsafe_base64_decode(uidb64).decode()
 
         except:
-            raise exceptions.AuthenticationFailed("Unauthorized")
+            return response.Response(
+                data={"message": "wrong credentails"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
         user_dc, user = services.check_password_token(user_id, token)
 
