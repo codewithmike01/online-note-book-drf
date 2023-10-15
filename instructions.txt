@@ -5,6 +5,7 @@
 
 ******** What improvement can be made to the project ********
 
+- Notes should be categorized
 - A feature that allows user to send only notes created by them to their email.
 - Proper Test can be writting to test all features of the app.
 
