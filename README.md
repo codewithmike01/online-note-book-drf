@@ -4,6 +4,12 @@
 
 The online Notes is be use by staff to log thier personal notes. The online noe app is developed using Django Rest Framework (DRF).
 
+https://github.com/Ginohmk/online-note-book-drf/assets/58771507/3b1a8781-2fa2-4ddf-9a96-427772144469
+
+### Live link
+
+Hosted on aws, [live link](http://44.241.249.189:8000/api/schema/docs/) to swagger doc
+
 ### Features
 
 1. User Registration - User should be able to register with the follwing details:

@@ -5,15 +5,12 @@ from django.conf import settings
 from users import services as user_services
 from . import models
 
-# For making html
-from django.shortcuts import render
-from django.template import Template, Context
 
 # To validate uuid passed in api
 from uuid import UUID
 
 # Email
-from django.core.mail import EmailMessage, send_mail
+from django.core.mail import send_mail
 
 from django.template.loader import get_template
 

@@ -187,6 +187,21 @@ class OrderNotePriorityApi(views.APIView):
 
 
 class OrderNoteCreatedAtApi(views.APIView):
+    """Order note created date in ascending and descending
+
+    Parameter
+    ----------
+    asc : str
+        To order in ascending order
+
+    desc : str
+        To order in descending order
+
+    Return
+    ------
+    ordered notes: list
+    """
+
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
