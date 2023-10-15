@@ -40,14 +40,14 @@ class NoteApi(views.APIView):
         # create note
         serializer.instance = services.create_note(request.user, data)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     def get(self, request):
         user_note_collection = services.get_user_notes(request.user)
 
         serializer = note_serializer.NoteSeralizer(user_note_collection, many=True)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 # Get all notes
@@ -60,7 +60,7 @@ class NotesApi(views.APIView):
 
         serializer = note_serializer.NoteSeralizer(note_collection, many=True)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 class NoteRetreiveUpdateDelete(views.APIView):
@@ -72,12 +72,15 @@ class NoteRetreiveUpdateDelete(views.APIView):
 
         serializer = note_serializer.NoteSeralizer(note)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, note_id):
         services.delete_user_note(request.user, note_id)
 
-        return response.Response(status=rest_status.HTTP_204_NO_CONTENT)
+        return response.Response(
+            data={"message": "Note deleted successfully"},
+            status=rest_status.HTTP_204_NO_CONTENT,
+        )
 
     @extend_schema(request=note_serializer.NoteSeralizer())
     def put(self, request, note_id):
@@ -90,7 +93,7 @@ class NoteRetreiveUpdateDelete(views.APIView):
             request.user, note_id, note_data
         )
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 class UnfinishedNoteApi(views.APIView):
@@ -268,4 +271,7 @@ class SendNotesToMail(views.APIView):
         # Send mail with generated contents
         services.send_email(html_template, email_data)
 
-        return response.Response(data={"message": "Note sent to mail Successfully!!"})
+        return response.Response(
+            data={"message": "Note sent to mail Successfully!!"},
+            status=status.HTTP_200_OK,
+        )
