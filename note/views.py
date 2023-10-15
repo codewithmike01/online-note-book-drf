@@ -68,6 +68,7 @@ class NoteRetreiveUpdateDelete(views.APIView):
     permission_classes = (permission.CustomPermision,)
 
     def get(self, request, note_id):
+        # Retreive note with id equal note_id
         note = services.get_user_note(note_id)
 
         serializer = note_serializer.NoteSeralizer(note)
@@ -75,6 +76,7 @@ class NoteRetreiveUpdateDelete(views.APIView):
         return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, note_id):
+        # Perform note deletion with id equal note_id
         services.delete_user_note(request.user, note_id)
 
         return response.Response(
@@ -89,6 +91,7 @@ class NoteRetreiveUpdateDelete(views.APIView):
 
         note_data = serializer.validated_data
 
+        # Perform note update with id equal note_id
         serializer.instance = services.update_user_note(
             request.user, note_id, note_data
         )

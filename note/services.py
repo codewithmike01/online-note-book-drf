@@ -23,6 +23,40 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass
 class NoteDataClass:
+    """Defines the data struture of the note for response.
+
+    Class varibles
+    ----------
+    title : str
+        The title of a note
+
+    due_date : str
+        The speculated date of completing task
+
+    content : str
+        The main contents of note
+
+    priority: int
+      To know the importance level of a note
+
+    created_at : str, default None
+        Time note was created created_at
+
+    id : str,
+        The user id
+
+    is_complete : bool, default False
+        To determain if not is compled or not
+
+    user : instance object,
+        The user object
+
+    Methods
+    ------
+    from_instance(cls, note)
+        Returns object of class
+    """
+
     title: str
     due_date: datetime.datetime
     content: str
@@ -59,6 +93,17 @@ def check_valid_uuid(id):
 
 
 def create_note(user, note_dc: "NoteDataClass") -> "NoteDataClass":
+    """Create note
+
+    Parameter
+    ----------
+    Note : note object instance
+        The note details
+
+    Returns
+    ------
+     Note Data Class
+    """
     instance = models.Note(
         title=note_dc.title,
         due_date=note_dc.due_date,
@@ -73,18 +118,53 @@ def create_note(user, note_dc: "NoteDataClass") -> "NoteDataClass":
 
 
 def get_user_notes(user: "User") -> list["NoteDataClass"]:
+    """Get notes by user
+
+    Parameters
+    ----------
+      user: dict
+        contains user details
+
+    Return
+    ------
+        Note: Note data class
+           contain  user notes details
+    """
     user_note = models.Note.objects.filter(user=user)
 
     return [NoteDataClass.from_instance(single_note) for single_note in user_note]
 
 
 def get_notes() -> list["NoteDataClass"]:
+    """Get all notes
+
+    Parameters
+    ----------
+      None
+
+    Return
+    ------
+        Note: list[NoteDataClass]
+           contain all notes
+    """
     notes = models.Note.objects.all()
 
     return [NoteDataClass.from_instance(single_note) for single_note in notes]
 
 
 def get_user_note(note_id: str) -> "NoteDataClass":
+    """Get  user note by id
+
+    Parameters
+    ----------
+      note_id: str
+        contains note id
+
+    Return
+    ------
+        Note: Note data class
+           contain note details
+    """
     check_valid_uuid(note_id)
 
     note = models.Note.objects.filter(id=note_id).first()
@@ -96,6 +176,20 @@ def get_user_note(note_id: str) -> "NoteDataClass":
 
 
 def delete_user_note(user: "User", note_id: str) -> None:
+    """Delete user note
+
+    Parameters
+    ----------
+      user: dict
+        contains user details
+
+      note_id: str
+        contains note id to be delete
+
+    Return
+    ------
+        None
+    """
     check_valid_uuid(note_id)
 
     note = models.Note.objects.filter(id=note_id).first()
@@ -112,6 +206,25 @@ def delete_user_note(user: "User", note_id: str) -> None:
 def update_user_note(
     user: "User", note_id: str, note_data: "NoteDataClass"
 ) -> "NoteDataClass":
+    """Update user note
+
+    Parameters
+    ----------
+      user: dict
+        contains user details
+
+      note_id: str
+        contains note id to be updated
+
+      note_data: dict
+        contains new details of note
+
+    Return
+    ------
+        Note: Note data class
+           contain new note details
+    """
+
     check_valid_uuid(note_id)
 
     note = models.Note.objects.filter(id=note_id).first()
@@ -134,18 +247,48 @@ def update_user_note(
 
 
 def get_unfinished_note() -> "NoteDataClass":
+    """Get all notes that are unfinished/not completed
+
+    Parameters
+    ----------
+      None
+
+    Return
+    ------
+        Contains orderd noted
+    """
     notes = models.Note.objects.filter(is_complete=False)
 
     return [NoteDataClass.from_instance(single_note) for single_note in notes]
 
 
 def get_finished_note() -> list["NoteDataClass"]:
+    """Get all notes that are finished/completed
+
+    Parameters
+    ----------
+      None
+
+    Return
+    ------
+        Contains orderd noted
+    """
     notes = models.Note.objects.filter(is_complete=True)
 
     return [NoteDataClass.from_instance(single_note) for single_note in notes]
 
 
 def get_overdue_note() -> list["NoteDataClass"]:
+    """Get all notes that are overdue date
+
+    Parameters
+    ----------
+      None
+
+    Return
+    ------
+        Contains orderd noted
+    """
     pass
 
     current_date = datetime.datetime.now()
@@ -156,6 +299,17 @@ def get_overdue_note() -> list["NoteDataClass"]:
 
 
 def get_order_by_due_date_note(order_arg: str) -> list["NoteDataClass"]:
+    """Get all notes ordered by due date
+
+    Parameters
+    ----------
+     order_arg : str
+        Could be either asc (ascending) or desc (descending)
+
+    Return
+    ------
+        Contains orderd noted
+    """
     sort_arg_value = "due_date" if order_arg.lower() == "asc" else "-due_date"
 
     notes = models.Note.objects.all().order_by(sort_arg_value)
@@ -164,6 +318,17 @@ def get_order_by_due_date_note(order_arg: str) -> list["NoteDataClass"]:
 
 
 def get_order_by_priority_note(order_arg: str) -> list["NoteDataClass"]:
+    """Get all notes ordered by priority
+
+    Parameters
+    ----------
+     order_arg : str
+        Could be either asc (ascending) or desc (descending)
+
+    Return
+    ------
+        Contains orderd noted
+    """
     sort_arg_value = "priority" if order_arg.lower() == "asc" else "-priority"
 
     notes = models.Note.objects.all().order_by(sort_arg_value)
@@ -172,6 +337,18 @@ def get_order_by_priority_note(order_arg: str) -> list["NoteDataClass"]:
 
 
 def get_order_by_created_at_note(order_arg: str) -> list["NoteDataClass"]:
+    """Get all notes ordered by created date
+
+    Parameters
+    ----------
+     order_arg : str
+        Could be either asc (ascending) or desc (descending)
+
+    Return
+    ------
+        Contains orderd noted
+    """
+
     sort_arg_value = "created_at" if order_arg.lower() == "asc" else "-created_at"
 
     notes = models.Note.objects.all().order_by(sort_arg_value)
@@ -180,6 +357,18 @@ def get_order_by_created_at_note(order_arg: str) -> list["NoteDataClass"]:
 
 
 def generate_pdf_html() -> object:
+    """Generate context( variables) for pdf html template
+
+    Parameters
+    ----------
+        None
+
+
+    Return
+    ------
+     context: dict
+    """
+
     # Get all notes
     notes = get_notes()
 
@@ -231,6 +420,17 @@ def generate_pdf_html() -> object:
 
 
 async def get_html_template(context):
+    """Creates html templte
+
+    Parameter
+    ----------
+    context : dict
+        Details of variables needed in the html
+
+    Return
+    ------
+     html structured tags created: str
+    """
     return get_template("notes.html").render(context)
 
 
