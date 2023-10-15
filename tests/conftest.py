@@ -1,9 +1,12 @@
 import pytest
 
 from users import services as user_services, serializers as user_serializer
-from note import services as note_services, models
+from note import models
 
 from rest_framework.test import APIClient
+
+import datetime
+import pytz
 
 client = APIClient()
 
@@ -35,9 +38,9 @@ def auth_client(user):
 @pytest.fixture
 def note(user):
     instance = models.Note.objects.create(
-        title="Fix bug",
+        title="Testing Fixer",
         content="This is bug Fixed over here",
-        due_date="2023-09-23 20:45:37.013440",
+        due_date=datetime.datetime(2023, 9, 23, 20, 45, 37, 127325, tzinfo=pytz.UTC),
         is_complete=False,
         priority=3,
         user_id=user.id,

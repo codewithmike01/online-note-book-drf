@@ -133,6 +133,21 @@ class OverDueNoteApi(views.APIView):
 
 
 class OrderNoteDueDateApi(views.APIView):
+    """Order note due date in ascending and descending
+
+    Parameter
+    ----------
+    asc : str
+        To order in ascending order
+
+    desc : str
+        To order in descending order
+
+    Return
+    ------
+     ordered notes: list
+    """
+
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
@@ -145,6 +160,21 @@ class OrderNoteDueDateApi(views.APIView):
 
 
 class OrderNotePriorityApi(views.APIView):
+    """Order note priority in ascending and descending
+
+    Parameter
+    ----------
+    asc : str
+        To order in ascending order
+
+    desc : str
+        To order in descending order
+
+    Return
+    ------
+     ordered notes: list
+    """
+
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
@@ -203,7 +233,6 @@ class GenerateCSVApi(views.APIView):
         )
 
         for note in serializer.data:
-            print(note.get("user").get("first_name"), "Data")
             writer.writerow(
                 [
                     note.get("id"),
