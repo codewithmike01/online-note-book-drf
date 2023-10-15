@@ -58,7 +58,7 @@ class RegisterApi(views.APIView):
                 "btn_text": "Proceed to verify email",
             }
 
-            # Await template creation
+            # Perform html template generation asynchronously
             html_template = asyncio.run(services.get_html_template(email_context))
 
             data = {
@@ -197,6 +197,7 @@ class RequestPasswordReset(views.APIView):
             "btn_text": "Proceed to reset password.",
         }
 
+        # Perform html template generation asynchronously
         html_template = asyncio.run(services.get_html_template(email_context))
 
         data = {
@@ -228,6 +229,7 @@ class PasswordResetConfirmApi(views.APIView):
         data = serializer.validated_data
 
         try:
+            # Verify uidb64 is authentic
             user_id = urlsafe_base64_decode(uidb64).decode()
 
         except:
@@ -236,6 +238,7 @@ class PasswordResetConfirmApi(views.APIView):
                 status=status.HTTP_401_UNAUTHORIZED,
             )
 
+        # Verify user_id and token are authentic
         user_dc, user = services.check_password_token(user_id, token)
 
         user.set_password(data.get("password"))
