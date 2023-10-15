@@ -29,7 +29,6 @@ class RegisterApi(views.APIView):
         serializer = user_serializer.UserSerializer(data=request.data)
 
         #  check validity
-
         serializer.is_valid(raise_exception=True)
 
         data = serializer.validated_data
@@ -45,10 +44,8 @@ class RegisterApi(views.APIView):
             # Token (To auth user on registraion successful)
             token = services.create_token(serializer.data.get("id"))
 
-            # Send verification email
-
+            # Get url domain
             current_site = get_current_site(request).domain
-            # relative_link = reverse(f"api/users/verify-email/{str(token)}")
 
             absolute_url = (
                 "http://" + current_site + f"/api/users/verify-email/{str(token)}"
@@ -61,7 +58,7 @@ class RegisterApi(views.APIView):
                 "btn_text": "Proceed to verify email",
             }
 
-            # Await template creation
+            # Perform html template generation asynchronously
             html_template = asyncio.run(services.get_html_template(email_context))
 
             data = {
@@ -78,7 +75,7 @@ class RegisterApi(views.APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        resp = response.Response()
+        resp = response.Response(status=status.HTTP_201_CREATED)
 
         resp.data = serializer.data
 
@@ -99,15 +96,23 @@ class LoginApi(views.APIView):
         user_data = services.check_user_email(data.email)
 
         if user_data is None:
-            raise exceptions.AuthenticationFailed("Wrong credentials provided")
+            return response.Response(
+                data={"message": "Wrong credentials provided"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
         if not user_data.check_password(raw_password=data.password):
-            raise exceptions.AuthenticationFailed("Wrong credentials provided")
+            return response.Response(
+                data={"message": "Wrong credentials provided"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
         # Token
         token = services.create_token(user_data.id)
 
-        resp = response.Response()
+        resp = response.Response(
+            data={"message": "Successfully logged in"}, status=status.HTTP_200_OK
+        )
 
         resp.set_cookie(key="jwt", value=token, httponly=True)
 
@@ -135,7 +140,6 @@ class UserApi(views.APIView):
 
 class LogoutApi(views.APIView):
     authentication_classes = (auth_user.CustomUserAuthentication,)
-    permission_classes = (permission.CustomPermision,)
 
     def post(self, request):
         res = response.Response()
@@ -177,6 +181,7 @@ class RequestPasswordReset(views.APIView):
         # Encode user id
         uidb64 = urlsafe_base64_encode(force_bytes(user_data.id))
 
+        # Generate password reset token
         token = PasswordResetTokenGenerator().make_token(user_data)
 
         current_site = get_current_site(request).domain
@@ -192,6 +197,7 @@ class RequestPasswordReset(views.APIView):
             "btn_text": "Proceed to reset password.",
         }
 
+        # Perform html template generation asynchronously
         html_template = asyncio.run(services.get_html_template(email_context))
 
         data = {
@@ -208,7 +214,9 @@ class RequestPasswordReset(views.APIView):
                 status=status.HTTP_500_INTERNAL_SERVER_ERROR,
             )
 
-        return response.Response(data={"message": "Password reset link sent!!"})
+        return response.Response(
+            data={"message": "Password reset link sent!!"}, status=status.HTTP_200_OK
+        )
 
 
 class PasswordResetConfirmApi(views.APIView):
@@ -221,11 +229,16 @@ class PasswordResetConfirmApi(views.APIView):
         data = serializer.validated_data
 
         try:
+            # Verify uidb64 is authentic
             user_id = urlsafe_base64_decode(uidb64).decode()
 
         except:
-            raise exceptions.AuthenticationFailed("Unauthorized")
+            return response.Response(
+                data={"message": "wrong credentails"},
+                status=status.HTTP_401_UNAUTHORIZED,
+            )
 
+        # Verify user_id and token are authentic
         user_dc, user = services.check_password_token(user_id, token)
 
         user.set_password(data.get("password"))

@@ -96,7 +96,7 @@ def create_user(user_dc: "UserDataClass") -> "UserDataClass":
 
     Returns
     ------
-     Usr Data Class
+     User Data Class
     """
     instance = models.User(
         first_name=user_dc.first_name,

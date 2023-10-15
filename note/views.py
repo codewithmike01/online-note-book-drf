@@ -40,14 +40,14 @@ class NoteApi(views.APIView):
         # create note
         serializer.instance = services.create_note(request.user, data)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_201_CREATED)
 
     def get(self, request):
         user_note_collection = services.get_user_notes(request.user)
 
         serializer = note_serializer.NoteSeralizer(user_note_collection, many=True)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 # Get all notes
@@ -60,7 +60,7 @@ class NotesApi(views.APIView):
 
         serializer = note_serializer.NoteSeralizer(note_collection, many=True)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 class NoteRetreiveUpdateDelete(views.APIView):
@@ -68,16 +68,21 @@ class NoteRetreiveUpdateDelete(views.APIView):
     permission_classes = (permission.CustomPermision,)
 
     def get(self, request, note_id):
+        # Retreive note with id equal note_id
         note = services.get_user_note(note_id)
 
         serializer = note_serializer.NoteSeralizer(note)
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
     def delete(self, request, note_id):
+        # Perform note deletion with id equal note_id
         services.delete_user_note(request.user, note_id)
 
-        return response.Response(status=rest_status.HTTP_204_NO_CONTENT)
+        return response.Response(
+            data={"message": "Note deleted successfully"},
+            status=rest_status.HTTP_204_NO_CONTENT,
+        )
 
     @extend_schema(request=note_serializer.NoteSeralizer())
     def put(self, request, note_id):
@@ -86,11 +91,12 @@ class NoteRetreiveUpdateDelete(views.APIView):
 
         note_data = serializer.validated_data
 
+        # Perform note update with id equal note_id
         serializer.instance = services.update_user_note(
             request.user, note_id, note_data
         )
 
-        return response.Response(data=serializer.data)
+        return response.Response(data=serializer.data, status=status.HTTP_200_OK)
 
 
 class UnfinishedNoteApi(views.APIView):
@@ -130,6 +136,21 @@ class OverDueNoteApi(views.APIView):
 
 
 class OrderNoteDueDateApi(views.APIView):
+    """Order note due date in ascending and descending
+
+    Parameter
+    ----------
+    asc : str
+        To order in ascending order
+
+    desc : str
+        To order in descending order
+
+    Return
+    ------
+     ordered notes: list
+    """
+
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
@@ -142,6 +163,21 @@ class OrderNoteDueDateApi(views.APIView):
 
 
 class OrderNotePriorityApi(views.APIView):
+    """Order note priority in ascending and descending
+
+    Parameter
+    ----------
+    asc : str
+        To order in ascending order
+
+    desc : str
+        To order in descending order
+
+    Return
+    ------
+     ordered notes: list
+    """
+
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
@@ -154,6 +190,21 @@ class OrderNotePriorityApi(views.APIView):
 
 
 class OrderNoteCreatedAtApi(views.APIView):
+    """Order note created date in ascending and descending
+
+    Parameter
+    ----------
+    asc : str
+        To order in ascending order
+
+    desc : str
+        To order in descending order
+
+    Return
+    ------
+    ordered notes: list
+    """
+
     authentication_classes = (user_auth.CustomUserAuthentication,)
     permission_classes = (permission.CustomPermision,)
 
@@ -200,7 +251,6 @@ class GenerateCSVApi(views.APIView):
         )
 
         for note in serializer.data:
-            print(note.get("user").get("first_name"), "Data")
             writer.writerow(
                 [
                     note.get("id"),
@@ -268,4 +318,7 @@ class SendNotesToMail(views.APIView):
         # Send mail with generated contents
         services.send_email(html_template, email_data)
 
-        return response.Response(data={"message": "Note sent to mail Successfully!!"})
+        return response.Response(
+            data={"message": "Note sent to mail Successfully!!"},
+            status=status.HTTP_200_OK,
+        )
