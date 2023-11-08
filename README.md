@@ -2,7 +2,7 @@
 
 ## Online Note App
 
-The online Notes is be use by staff to log thier personal notes. The online noe app is developed using Django Rest Framework (DRF).
+The online Notes is be use by staff to log thier personal notes. The online note app is developed using Django Rest Framework (DRF).
 
 https://github.com/Ginohmk/online-note-book-drf/assets/58771507/3b1a8781-2fa2-4ddf-9a96-427772144469
 
